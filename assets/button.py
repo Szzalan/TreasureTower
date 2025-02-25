@@ -6,6 +6,7 @@ class Button:
         self.x_pos = pos[0]
         self.y_pos = pos[1]
         self.font = font
+        self.default_rect_color = rect_color
         self.text_input = text_input
         self.base_color = base_color
         self.rect_color = rect_color
@@ -26,5 +27,7 @@ class Button:
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
             self.rect_color = self.hover_color
+        else:
+            self.rect_color = self.default_rect_color
         pygame.draw.rect(screen, self.rect_color, self.rect,border_radius=10)
         screen.blit(self.text, self.text_rect)
