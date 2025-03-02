@@ -11,7 +11,7 @@ def how_to_play(screen, main_menu):
     text = "Your goal is to collect the treasure on top of the tower."
     text2 = "You can move using the W, A, S and D keys."
     text3 = "To claim the final treasure,you need to reach the end of the tower and kill the boss."
-    text4 = "To overcome all of this you will use a magic dice to defeat your enemies."
+    text4 = "To overcome all of this you will use a magic dice_faces to defeat your enemies."
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     informations = pygame.font.Font("../assets/Pixeltype.ttf", 30).render(text,False, (255, 255, 255))
     informations2 = pygame.font.Font("../assets/Pixeltype.ttf", 30).render(text2, False, (255, 255, 255))
