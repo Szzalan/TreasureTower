@@ -57,7 +57,7 @@ class Dice(pygame.sprite.Sprite):
             self.bounced = False
             self.start = False
     def roll_animation(self):
-        if self.rect.bottom < self.ground_level and self.frame_counter % 8 == 0:
+        if self.rect.bottom < self.ground_level and self.frame_counter % 2 == 0:
             self.current_frame_index = (self.current_frame_index + 1) % len(self.angled_frames)
             self.image = self.angled_frames[self.current_frame_index]
         elif not self.has_landed:
