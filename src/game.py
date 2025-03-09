@@ -10,6 +10,14 @@ pygame.init()
 clock = pygame.time.Clock()
 
 def game(screen, main_menu):
+    tile = pygame.image.load("../assets/map_assets/dongeonWallFloorTransparent1.png").convert()
+    tile_rect = tile.get_rect()
+    room_size = tile_rect.size*10
+    floor_width = tile_rect.width*100
+    floor_height = tile_rect.height*100
+    wall = 1
+    floor = 0
+
     dice = Dice(screen.get_width()/2, 350)
     all_sprites = pygame.sprite.Group(dice)
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
