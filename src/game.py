@@ -89,16 +89,34 @@ def carve_corridors(rooms,dungeon_map):
 def create_empty_map(map_width, map_height):
     return [["WALL" for x in range(map_width)] for _ in range(map_height)]
 
-def draw_dungeon(screen, dungeon_map):
-    tile_rect = Room.TILE.get_rect()
+def generate_dungeon_surface(dungeon_map):
+    tile_width = Room.TILE.get_width()
+    tile_height = Room.TILE.get_height()
+    dungeon_width = len(dungeon_map[0])
+    dungeon_height = len(dungeon_map)
+    dungeon_surf = pygame.Surface((dungeon_width, dungeon_height), pygame.SRCALPHA)
     for y, row in enumerate(dungeon_map):
         for x, tile_type in enumerate(row):
+            x_pixel_pos = x * tile_width
+            y_pixel_pos = y * tile_height
             if tile_type == "WALL":
-                screen.blit(Room.WALL, (x * tile_rect.width, y * tile_rect.height))
+                dungeon_surf.blit(Room.WALL, (x_pixel_pos, y_pixel_pos))
             elif tile_type == "FLOOR":
-                screen.blit(Room.TILE, (x * tile_rect.width, y * tile_rect.height))
+                dungeon_surf.blit(Room.TILE, (x_pixel_pos, y_pixel_pos))
             elif tile_type == "CORRIDOR":
-                screen.blit(Room.TILE, (x * tile_rect.width, y * tile_rect.height))
+                dungeon_surf.blit(Room.TILE, (x_pixel_pos, y_pixel_pos))
+    return dungeon_surf
+
+def draw_dungeon(screen, dungeon_surf):
+    dungeon_width = dungeon_surf.get_width()
+    dungeon_height = dungeon_surf.get_height()
+
+    screen_width, screen_height = screen.get_size()
+
+    offset_x = (screen_width - dungeon_width) // 2
+    offset_y = (screen_height - dungeon_height) // 2
+
+    screen.blit(dungeon_surf, (offset_x, offset_y))
 
 def update_wall_boundaries(dungeon_map):
     map_height = len(dungeon_map)
@@ -131,6 +149,8 @@ def dungeon_generator():
 def game(screen, main_menu):
     Room.load_images()
     dungeon_map,rooms = dungeon_generator()
+    dungeon_surface = generate_dungeon_surface(dungeon_map)
+
     dice = Dice(screen.get_width()/2, 350)
     all_sprites = pygame.sprite.Group(dice)
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
@@ -154,7 +174,7 @@ def game(screen, main_menu):
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
-        draw_dungeon(screen, dungeon_map)
+        draw_dungeon(screen, dungeon_surface)
         all_sprites.update()
         all_sprites.draw(screen)
         roll_button.draw(screen)
