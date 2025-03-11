@@ -9,15 +9,128 @@ from assets.dice import Dice
 pygame.init()
 clock = pygame.time.Clock()
 
-def game(screen, main_menu):
-    tile = pygame.image.load("../assets/map_assets/dongeonWallFloorTransparent1.png").convert()
-    tile_rect = tile.get_rect()
-    room_size = tile_rect.size*10
-    floor_width = tile_rect.width*100
-    floor_height = tile_rect.height*100
-    wall = 1
-    floor = 0
+NUM_ROOMS = 10
+class Room:
+    def __init__(self, x, y, width, height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
 
+    TILE = None
+    WALL = None
+
+    @classmethod
+    def load_images(cls):
+        cls.TILE = pygame.image.load("../assets/map_assets/dongeonWallFloorTransparent1.png").convert_alpha()
+        cls.WALL = pygame.image.load("../assets/map_assets/dongeonWallFloorTransparent10.png").convert_alpha()
+
+    def center(self):
+        center_x = self.x + self.width // 2
+        center_y = self.y + self.height // 2
+        return center_x, center_y
+
+    def check_overlap(self,other_room):
+        tile_width = Room.TILE.get_width()
+        tile_height = Room.TILE.get_height()
+
+        return (
+            self.x // tile_width < (other_room.x + other_room.width) // tile_width
+            and (self.x + self.width) // tile_width > other_room.x // tile_width
+            and self.y // tile_height < (other_room.y + other_room.height) // tile_height
+            and (self.y + self.height) // tile_height > other_room.y // tile_height
+                    )
+FLOOR_WIDTH = 500
+FLOOR_HEIGHT = 500
+
+def generate_rooms(floor_width, floor_height,num_rooms):
+    rooms = []
+    tile_width = Room.TILE.get_width()
+    tile_height = Room.TILE.get_height()
+    min_room_size = tile_width * 3
+    max_room_size = tile_width * 5
+
+    for i in range(num_rooms):
+        room_width = random.randint(min_room_size, max_room_size)
+        room_height = random.randint(min_room_size, max_room_size)
+        room_x = random.randint(0, floor_width - room_width)
+        room_y = random.randint(0, floor_height - room_height)
+        new_room = Room(room_x, room_y, room_width, room_height)
+        if all(not new_room.check_overlap(other_room) for other_room in rooms):
+            rooms.append(new_room)
+    return rooms
+
+def carve_rooms(room_list, dungeon_map):
+    tile_width = Room.TILE.get_width()
+    tile_height = Room.TILE.get_height()
+    for room in room_list:
+        for y in range(room.y // tile_height,(room.y+room.height) // tile_height):
+            for x in range(room.x // tile_width, (room.x + room.width) // tile_width):
+                dungeon_map[y][x] = "FLOOR"
+
+def carve_corridors(rooms,dungeon_map):
+    for i in range(len(rooms) - 1):
+        room_a = rooms[i]
+        room_b = rooms[i + 1]
+        tile_width = Room.TILE.get_width()
+        tile_height = Room.TILE.get_height()
+        center_a = (room_a.center()[0] // tile_width, room_a.center()[1] // tile_height)
+        center_b = (room_b.center()[0] // tile_width, room_b.center()[1] // tile_height)
+
+
+        for x in range(min(center_a[0], center_b[0]), max(center_a[0], center_b[0]) + 1):
+            if dungeon_map[center_a[1]][x] == "WALL":
+                dungeon_map[center_a[1]][x] = "CORRIDOR"
+
+        for y in range(min(center_a[1], center_b[1]), max(center_a[1], center_b[1]) + 1):
+            if dungeon_map[y][center_b[0]] == "WALL":
+                dungeon_map[y][center_b[0]] = "CORRIDOR"
+
+def create_empty_map(map_width, map_height):
+    return [["WALL" for x in range(map_width)] for _ in range(map_height)]
+
+def draw_dungeon(screen, dungeon_map):
+    tile_rect = Room.TILE.get_rect()
+    for y, row in enumerate(dungeon_map):
+        for x, tile_type in enumerate(row):
+            if tile_type == "WALL":
+                screen.blit(Room.WALL, (x * tile_rect.width, y * tile_rect.height))
+            elif tile_type == "FLOOR":
+                screen.blit(Room.TILE, (x * tile_rect.width, y * tile_rect.height))
+            elif tile_type == "CORRIDOR":
+                screen.blit(Room.TILE, (x * tile_rect.width, y * tile_rect.height))
+
+def update_wall_boundaries(dungeon_map):
+    map_height = len(dungeon_map)
+    map_width = len(dungeon_map[0])
+    new_map = [["EMPTY" for _ in range(map_width)] for _ in range(map_height)]
+
+    for y in range(map_height):
+        for x in range(map_width):
+            if dungeon_map[y][x] in ["FLOOR", "CORRIDOR"]:
+                new_map[y][x] = dungeon_map[y][x]
+                for dy in [-1, 0,1]:
+                    for dx in [-1, 0,1]:
+                        neighbor_x = x + dx
+                        neighbor_y = y + dy
+
+                        if 0 <= neighbor_x < map_width and 0 <= neighbor_y < map_height:
+                            if dungeon_map[neighbor_y][neighbor_x] == "WALL":
+                                new_map[neighbor_y][neighbor_x] = "WALL"
+    return new_map
+
+def dungeon_generator():
+    dungeon_map = create_empty_map(FLOOR_WIDTH, FLOOR_HEIGHT)
+    rooms = generate_rooms(FLOOR_WIDTH, FLOOR_HEIGHT, NUM_ROOMS)
+    carve_rooms(rooms, dungeon_map)
+    carve_corridors(rooms, dungeon_map)
+    dungeon_map = update_wall_boundaries(dungeon_map)
+
+    return dungeon_map,rooms
+
+def game(screen, main_menu):
+    Room.load_images()
+    dungeon_map,rooms = dungeon_generator()
     dice = Dice(screen.get_width()/2, 350)
     all_sprites = pygame.sprite.Group(dice)
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
@@ -41,6 +154,7 @@ def game(screen, main_menu):
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
+        draw_dungeon(screen, dungeon_map)
         all_sprites.update()
         all_sprites.draw(screen)
         roll_button.draw(screen)
