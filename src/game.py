@@ -9,7 +9,10 @@ from assets.dice import Dice
 pygame.init()
 clock = pygame.time.Clock()
 
-NUM_ROOMS = 10
+FLOOR_WIDTH = 500
+FLOOR_HEIGHT = 500
+NUM_ROOMS = 5
+
 class Room:
     def __init__(self, x, y, width, height):
         self.x = x
@@ -40,8 +43,6 @@ class Room:
             and self.y // tile_height < (other_room.y + other_room.height) // tile_height
             and (self.y + self.height) // tile_height > other_room.y // tile_height
                     )
-FLOOR_WIDTH = 500
-FLOOR_HEIGHT = 500
 
 def generate_rooms(floor_width, floor_height,num_rooms):
     rooms = []
@@ -56,6 +57,7 @@ def generate_rooms(floor_width, floor_height,num_rooms):
         room_x = random.randint(0, floor_width - room_width)
         room_y = random.randint(0, floor_height - room_height)
         new_room = Room(room_x, room_y, room_width, room_height)
+
         if all(not new_room.check_overlap(other_room) for other_room in rooms):
             rooms.append(new_room)
     return rooms
@@ -63,6 +65,7 @@ def generate_rooms(floor_width, floor_height,num_rooms):
 def carve_rooms(room_list, dungeon_map):
     tile_width = Room.TILE.get_width()
     tile_height = Room.TILE.get_height()
+
     for room in room_list:
         for y in range(room.y // tile_height,(room.y+room.height) // tile_height):
             for x in range(room.x // tile_width, (room.x + room.width) // tile_width):
@@ -77,7 +80,6 @@ def carve_corridors(rooms,dungeon_map):
         center_a = (room_a.center()[0] // tile_width, room_a.center()[1] // tile_height)
         center_b = (room_b.center()[0] // tile_width, room_b.center()[1] // tile_height)
 
-
         for x in range(min(center_a[0], center_b[0]), max(center_a[0], center_b[0]) + 1):
             if dungeon_map[center_a[1]][x] == "WALL":
                 dungeon_map[center_a[1]][x] = "CORRIDOR"
@@ -89,18 +91,53 @@ def carve_corridors(rooms,dungeon_map):
 def create_empty_map(map_width, map_height):
     return [["WALL" for x in range(map_width)] for _ in range(map_height)]
 
+def rotate_walls(dungeon_map,x ,y):
+    map_height = len(dungeon_map)
+    map_width = len(dungeon_map[0])
+
+    def is_wall(x,y):
+        if 0 <= x < map_width and 0 <= y < map_height:
+            return dungeon_map[y][x] == "WALL"
+        return False
+
+    def is_floor_or_corridor(x,y):
+        if 0 <= x < map_width and 0 <= y < map_height:
+            return dungeon_map[y][x] == "FLOOR" or dungeon_map[y][x] == "CORRIDOR"
+        return False
+
+    top = is_wall(x, y - 1)
+    bottom = is_wall(x, y + 1)
+    right = is_floor_or_corridor(x + 1, y)
+    left = is_floor_or_corridor(x - 1, y)
+
+    if top and bottom and left:
+        return "right_turn"
+    elif top and bottom and right:
+        return "left_turn"
+    else:
+        return "wall"
+
 def generate_dungeon_surface(dungeon_map):
     tile_width = Room.TILE.get_width()
     tile_height = Room.TILE.get_height()
     dungeon_width = len(dungeon_map[0])
     dungeon_height = len(dungeon_map)
     dungeon_surf = pygame.Surface((dungeon_width, dungeon_height), pygame.SRCALPHA)
+
     for y, row in enumerate(dungeon_map):
         for x, tile_type in enumerate(row):
             x_pixel_pos = x * tile_width
             y_pixel_pos = y * tile_height
             if tile_type == "WALL":
-                dungeon_surf.blit(Room.WALL, (x_pixel_pos, y_pixel_pos))
+                wall_rotation = rotate_walls(dungeon_map,x,y)
+                if wall_rotation == "right_turn":
+                    rotated_wall = pygame.transform.rotate(Room.WALL, -90)
+                    dungeon_surf.blit(rotated_wall, (x_pixel_pos, y_pixel_pos))
+                elif wall_rotation == "left_turn":
+                    rotated_wall = pygame.transform.rotate(Room.WALL, 90)
+                    dungeon_surf.blit(rotated_wall, (x_pixel_pos, y_pixel_pos))
+                else:
+                    dungeon_surf.blit(Room.WALL, (x_pixel_pos, y_pixel_pos))
             elif tile_type == "FLOOR":
                 dungeon_surf.blit(Room.TILE, (x_pixel_pos, y_pixel_pos))
             elif tile_type == "CORRIDOR":
