@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="599ad302-b834-4bb0-8c7b-7b05988ef3e9" name="Changes" comment="Map centerred">
+    <list default="true" id="599ad302-b834-4bb0-8c7b-7b05988ef3e9" name="Changes" comment="Rotated walls for better visual look">
+      <change afterPath="$PROJECT_DIR$/assets/Spritesheet.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/game.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,6 +122,8 @@
       <workItem from="1741735852889" duration="1031000" />
       <workItem from="1741780263377" duration="2146000" />
       <workItem from="1741800722455" duration="4997000" />
+      <workItem from="1741814852101" duration="716000" />
+      <workItem from="1741823623484" duration="598000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -179,7 +181,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741736691445</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Rotated walls for better visual look">
+      <option name="closed" value="true" />
+      <created>1741814968065</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1741814968065</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -192,7 +202,8 @@
     <MESSAGE value="Exported dice functionality" />
     <MESSAGE value="Updated values" />
     <MESSAGE value="Map centerred" />
-    <option name="LAST_COMMIT_MESSAGE" value="Map centerred" />
+    <MESSAGE value="Rotated walls for better visual look" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rotated walls for better visual look" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/TreasureTower$how_to_play.coverage" NAME="how_to_play Coverage Results" MODIFIED="1740839125713" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
