@@ -5,6 +5,7 @@ from assets.button import Button
 import random
 
 from assets.dice import Dice
+import assets.spritesheet as spritesheet
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -12,6 +13,16 @@ clock = pygame.time.Clock()
 FLOOR_WIDTH = 500
 FLOOR_HEIGHT = 500
 NUM_ROOMS = 5
+
+def move_player(player, dx, dy, event):
+    if event.key == pygame.K_w:
+        player.x += dx
+    elif event.key == pygame.K_a:
+        player.y -= dy
+    elif event.key == pygame.K_s:
+        player.x -= dx
+    elif event.key == pygame.K_d:
+        player.y += dy
 
 class Room:
     def __init__(self, x, y, width, height):
@@ -187,6 +198,20 @@ def game(screen, main_menu):
     Room.load_images()
     dungeon_map,rooms = dungeon_generator()
     dungeon_surface = generate_dungeon_surface(dungeon_map)
+    sprite_sheet_image = pygame.image.load("../assets/player_sheet.png").convert_alpha()
+    sprite_sheet = spritesheet.HandleSpriteSheet(sprite_sheet_image)
+    right_frame_idle = sprite_sheet.get_image(0,0,16,16,offset_v=8)
+    left_frame_idle = sprite_sheet.get_image(1,0,16,16,offset_v=8)
+    back_frame_idle = sprite_sheet.get_image(2,0,16,16,offset_v=8)
+    front_frame_idle = sprite_sheet.get_image(3,0,16,16,offset_v=8)
+    right_frame_run_1 = sprite_sheet.get_image(0,1,16,16,offset_v=8)
+    right_frame_run_2 = sprite_sheet.get_image(1,1,16,16,offset_v=8)
+    left_frame_run_1 = sprite_sheet.get_image(2,1,16,16,offset_v=8)
+    left_frame_run_2 = sprite_sheet.get_image(3,1,16,16,offset_v=8)
+    back_frame_run_1 = sprite_sheet.get_image(0,2,16,16,offset_v=8)
+    back_frame_run_2 = sprite_sheet.get_image(1,2,16,16,offset_v=8)
+    front_frame_run_1 = sprite_sheet.get_image(2,2,16,16,offset_v=8)
+    front_frame_run_2 = sprite_sheet.get_image(3,2,16,16,offset_v=8)
 
     dice = Dice(screen.get_width()/2, 350)
     all_sprites = pygame.sprite.Group(dice)
@@ -210,11 +235,20 @@ def game(screen, main_menu):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                if event.key == pygame.K_w:
+                    pass
+                if event.key == pygame.K_a:
+                    pass
+                if event.key == pygame.K_s:
+                    pass
+                if event.key == pygame.K_d:
+                    pass
 
         draw_dungeon(screen, dungeon_surface)
         all_sprites.update()
         all_sprites.draw(screen)
         roll_button.draw(screen)
         back_button.draw(screen)
+        screen.blit(back_frame_idle,(0,0))
         pygame.display.flip()
         clock.tick(60)
