@@ -14,6 +14,17 @@ FLOOR_WIDTH = 500
 FLOOR_HEIGHT = 500
 NUM_ROOMS = 5
 
+def entity_spawner(dungeon_map):
+    wall_list = []
+    floor_list = []
+    for y,row in enumerate(dungeon_map):
+        if "WALL" in row:
+            wall_list.append((y,row.index("WALL")))
+        if "FLOOR" in row:
+            floor_list.append((y,row.index("FLOOR")))
+    player_spawn = random.choice(floor_list)
+    dungeon_map[player_spawn[0]][player_spawn[1]] = "TRAPDOOR"
+
 def move_player(player, dx, dy, event):
     if event.key == pygame.K_w:
         player.x += dx
@@ -58,7 +69,6 @@ class Room:
 def generate_rooms(floor_width, floor_height,num_rooms):
     rooms = []
     tile_width = Room.TILE.get_width()
-    tile_height = Room.TILE.get_height()
     min_room_size = tile_width * 3
     max_room_size = tile_width * 5
 
@@ -153,6 +163,8 @@ def generate_dungeon_surface(dungeon_map):
                 dungeon_surf.blit(Room.TILE, (x_pixel_pos, y_pixel_pos))
             elif tile_type == "CORRIDOR":
                 dungeon_surf.blit(Room.TILE, (x_pixel_pos, y_pixel_pos))
+            elif tile_type == "TRAPDOOR":
+                dungeon_surf.blit(Room.TILE, (x_pixel_pos, y_pixel_pos))
     return dungeon_surf
 
 def draw_dungeon(screen, dungeon_surf):
@@ -191,6 +203,7 @@ def dungeon_generator():
     carve_rooms(rooms, dungeon_map)
     carve_corridors(rooms, dungeon_map)
     dungeon_map = update_wall_boundaries(dungeon_map)
+    entity_spawner(dungeon_map)
 
     return dungeon_map,rooms
 
@@ -212,6 +225,7 @@ def game(screen, main_menu):
     back_frame_run_2 = sprite_sheet.get_image(1,2,16,16,offset_v=8)
     front_frame_run_1 = sprite_sheet.get_image(2,2,16,16,offset_v=8)
     front_frame_run_2 = sprite_sheet.get_image(3,2,16,16,offset_v=8)
+    trapdoor = pygame.image.load("../assets/trapdoor.png").convert_alpha()
 
     dice = Dice(screen.get_width()/2, 350)
     all_sprites = pygame.sprite.Group(dice)
@@ -249,6 +263,7 @@ def game(screen, main_menu):
         all_sprites.draw(screen)
         roll_button.draw(screen)
         back_button.draw(screen)
+        screen.blit(trapdoor,(100,100))
         screen.blit(back_frame_idle,(0,0))
         pygame.display.flip()
         clock.tick(60)
