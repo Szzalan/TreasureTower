@@ -17,12 +17,20 @@ NUM_ROOMS = 5
 def entity_spawner(dungeon_map):
     wall_list = []
     floor_list = []
+    corner_list = []
     for y,row in enumerate(dungeon_map):
-        if "WALL" in row:
-            wall_list.append((y,row.index("WALL")))
-        if "FLOOR" in row:
-            floor_list.append((y,row.index("FLOOR")))
+        for x,tile in enumerate(row):
+            if tile == "WALL":
+                if ((dungeon_map[y][x-1] == "WALL" or dungeon_map[y][x+1] == "WALL")
+                    and (dungeon_map[y-1][x] == "WALL" or dungeon_map[y+1][x] == "WALL")):
+                    corner_list.append((y,x))
+                else:
+                    wall_list.append((y,x))
+            if "FLOOR" in row:
+                floor_list.append((y,x))
     player_spawn = random.choice(floor_list)
+    door_spawn = random.choice(wall_list)
+    dungeon_map[door_spawn[0]][door_spawn[1]] = "DOOR"
     dungeon_map[player_spawn[0]][player_spawn[1]] = "TRAPDOOR"
 
 def move_player(player, dx, dy, event):
@@ -44,11 +52,15 @@ class Room:
 
     TILE = None
     WALL = None
+    TRAPDOOR = None
+    DOOR = None
 
     @classmethod
     def load_images(cls):
         cls.TILE = pygame.image.load("../assets/map_assets/dongeonWallFloorTransparent1.png").convert_alpha()
         cls.WALL = pygame.image.load("../assets/map_assets/dongeonWallFloorTransparent10.png").convert_alpha()
+        cls.TRAPDOOR = pygame.image.load("../assets/trapdoor.png").convert_alpha()
+        cls.DOOR = pygame.image.load("../assets/door.png").convert_alpha()
 
     def center(self):
         center_x = self.x + self.width // 2
@@ -71,12 +83,13 @@ def generate_rooms(floor_width, floor_height,num_rooms):
     tile_width = Room.TILE.get_width()
     min_room_size = tile_width * 3
     max_room_size = tile_width * 5
+    buffer = 1 * tile_width
 
     for i in range(num_rooms):
         room_width = random.randint(min_room_size, max_room_size)
         room_height = random.randint(min_room_size, max_room_size)
-        room_x = random.randint(0, floor_width - room_width)
-        room_y = random.randint(0, floor_height - room_height)
+        room_x = random.randint(buffer, floor_width - room_width - buffer)
+        room_y = random.randint(buffer, floor_height - room_height - buffer)
         new_room = Room(room_x, room_y, room_width, room_height)
 
         if all(not new_room.check_overlap(other_room) for other_room in rooms):
@@ -118,19 +131,23 @@ def rotate_walls(dungeon_map,x ,y):
 
     def is_wall(x,y):
         if 0 <= x < map_width and 0 <= y < map_height:
-            return dungeon_map[y][x] == "WALL"
+            return dungeon_map[y][x] == "WALL" or dungeon_map[y][x] == "DOOR"
         return False
 
     def is_floor_or_corridor(x,y):
         if 0 <= x < map_width and 0 <= y < map_height:
-            return dungeon_map[y][x] == "FLOOR" or dungeon_map[y][x] == "CORRIDOR"
+            return (dungeon_map[y][x] == "FLOOR" or dungeon_map[y][x] == "CORRIDOR"
+                    or dungeon_map[y][x] == "TRAPDOOR")
         return False
 
     top = is_wall(x, y - 1)
     bottom = is_wall(x, y + 1)
+    top_floor = is_floor_or_corridor(x, y - 1)
     right = is_floor_or_corridor(x + 1, y)
     left = is_floor_or_corridor(x - 1, y)
 
+    if top_floor:
+        return "corner"
     if top and bottom and left:
         return "right_turn"
     elif top and bottom and right:
@@ -159,12 +176,22 @@ def generate_dungeon_surface(dungeon_map):
                     dungeon_surf.blit(rotated_wall, (x_pixel_pos, y_pixel_pos))
                 else:
                     dungeon_surf.blit(Room.WALL, (x_pixel_pos, y_pixel_pos))
+            elif tile_type == "DOOR":
+                wall_rotation = rotate_walls(dungeon_map,x,y)
+                if wall_rotation == "right_turn":
+                    rotated_wall = pygame.transform.rotate(Room.DOOR, -90)
+                    dungeon_surf.blit(rotated_wall, (x_pixel_pos, y_pixel_pos))
+                elif wall_rotation == "left_turn":
+                    rotated_wall = pygame.transform.rotate(Room.DOOR, 90)
+                    dungeon_surf.blit(rotated_wall, (x_pixel_pos, y_pixel_pos))
+                else:
+                    dungeon_surf.blit(Room.DOOR, (x_pixel_pos, y_pixel_pos))
             elif tile_type == "FLOOR":
                 dungeon_surf.blit(Room.TILE, (x_pixel_pos, y_pixel_pos))
             elif tile_type == "CORRIDOR":
                 dungeon_surf.blit(Room.TILE, (x_pixel_pos, y_pixel_pos))
             elif tile_type == "TRAPDOOR":
-                dungeon_surf.blit(Room.TILE, (x_pixel_pos, y_pixel_pos))
+                dungeon_surf.blit(Room.TRAPDOOR, (x_pixel_pos, y_pixel_pos))
     return dungeon_surf
 
 def draw_dungeon(screen, dungeon_surf):
@@ -225,7 +252,6 @@ def game(screen, main_menu):
     back_frame_run_2 = sprite_sheet.get_image(1,2,16,16,offset_v=8)
     front_frame_run_1 = sprite_sheet.get_image(2,2,16,16,offset_v=8)
     front_frame_run_2 = sprite_sheet.get_image(3,2,16,16,offset_v=8)
-    trapdoor = pygame.image.load("../assets/trapdoor.png").convert_alpha()
 
     dice = Dice(screen.get_width()/2, 350)
     all_sprites = pygame.sprite.Group(dice)
@@ -263,7 +289,6 @@ def game(screen, main_menu):
         all_sprites.draw(screen)
         roll_button.draw(screen)
         back_button.draw(screen)
-        screen.blit(trapdoor,(100,100))
         screen.blit(back_frame_idle,(0,0))
         pygame.display.flip()
         clock.tick(60)

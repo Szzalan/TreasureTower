@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="599ad302-b834-4bb0-8c7b-7b05988ef3e9" name="Changes" comment="Added textures">
+      <change beforePath="$PROJECT_DIR$/.idea/TreasureTower.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TreasureTower.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/game.py" afterDir="false" />
     </list>
@@ -32,7 +34,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Szzalan/TreasureTower.git&quot;,
-    &quot;accountId&quot;: &quot;b4f2dc7f-e167-41af-8a36-e6430c9dcd8b&quot;
+    &quot;accountId&quot;: &quot;f0c92e06-261f-4c0e-ba11-171fbea70763&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -128,6 +130,11 @@
       <workItem from="1742056662949" duration="384000" />
       <workItem from="1742293881295" duration="12794000" />
       <workItem from="1742381265552" duration="8360000" />
+      <workItem from="1742569935592" duration="595000" />
+      <workItem from="1742581642674" duration="323000" />
+      <workItem from="1742582163578" duration="687000" />
+      <workItem from="1742582953433" duration="2939000" />
+      <workItem from="1742586617914" duration="3762000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -220,8 +227,8 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/TreasureTower$how_to_play.coverage" NAME="how_to_play Coverage Results" MODIFIED="1740839125713" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
-    <SUITE FILE_PATH="coverage/TreasureTower$main.coverage" NAME="main Coverage Results" MODIFIED="1742325497296" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/TreasureTower$main.coverage" NAME="main Coverage Results" MODIFIED="1742589817078" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/TreasureTower$button.coverage" NAME="button Coverage Results" MODIFIED="1740500624619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/assets" />
-    <SUITE FILE_PATH="coverage/TreasureTower$game.coverage" NAME="game Coverage Results" MODIFIED="1742300794014" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/TreasureTower$game.coverage" NAME="game Coverage Results" MODIFIED="1742585110754" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
 </project>
