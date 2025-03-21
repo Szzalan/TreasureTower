@@ -26,7 +26,7 @@ def entity_spawner(dungeon_map):
                     corner_list.append((y,x))
                 else:
                     wall_list.append((y,x))
-            if "FLOOR" in row:
+            if tile == "FLOOR":
                 floor_list.append((y,x))
     player_spawn = random.choice(floor_list)
     door_spawn = random.choice(wall_list)
@@ -142,12 +142,9 @@ def rotate_walls(dungeon_map,x ,y):
 
     top = is_wall(x, y - 1)
     bottom = is_wall(x, y + 1)
-    top_floor = is_floor_or_corridor(x, y - 1)
     right = is_floor_or_corridor(x + 1, y)
     left = is_floor_or_corridor(x - 1, y)
 
-    if top_floor:
-        return "corner"
     if top and bottom and left:
         return "right_turn"
     elif top and bottom and right:
