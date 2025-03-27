@@ -1,10 +1,13 @@
 import math
 
 import pygame
+
+from assets import player
 from assets.button import Button
 import random
 
 from assets.dice import Dice
+from assets.player import Player
 import assets.spritesheet as spritesheet
 
 pygame.init()
@@ -33,15 +36,7 @@ def entity_spawner(dungeon_map):
     dungeon_map[door_spawn[0]][door_spawn[1]] = "DOOR"
     dungeon_map[player_spawn[0]][player_spawn[1]] = "TRAPDOOR"
 
-def move_player(player, dx, dy, event):
-    if event.key == pygame.K_w:
-        player.x += dx
-    elif event.key == pygame.K_a:
-        player.y -= dy
-    elif event.key == pygame.K_s:
-        player.x -= dx
-    elif event.key == pygame.K_d:
-        player.y += dy
+    return player_spawn
 
 class Room:
     def __init__(self, x, y, width, height):
@@ -194,6 +189,7 @@ def generate_dungeon_surface(dungeon_map):
 def draw_dungeon(screen, dungeon_surf):
     dungeon_width = dungeon_surf.get_width()
     dungeon_height = dungeon_surf.get_height()
+    global offset_x, offset_y
 
     screen_width, screen_height = screen.get_size()
 
@@ -237,23 +233,14 @@ def game(screen, main_menu):
     dungeon_surface = generate_dungeon_surface(dungeon_map)
     sprite_sheet_image = pygame.image.load("../assets/player_sheet.png").convert_alpha()
     sprite_sheet = spritesheet.HandleSpriteSheet(sprite_sheet_image)
-    right_frame_idle = sprite_sheet.get_image(0,0,16,16,offset_v=8)
-    left_frame_idle = sprite_sheet.get_image(1,0,16,16,offset_v=8)
-    back_frame_idle = sprite_sheet.get_image(2,0,16,16,offset_v=8)
-    front_frame_idle = sprite_sheet.get_image(3,0,16,16,offset_v=8)
-    right_frame_run_1 = sprite_sheet.get_image(0,1,16,16,offset_v=8)
-    right_frame_run_2 = sprite_sheet.get_image(1,1,16,16,offset_v=8)
-    left_frame_run_1 = sprite_sheet.get_image(2,1,16,16,offset_v=8)
-    left_frame_run_2 = sprite_sheet.get_image(3,1,16,16,offset_v=8)
-    back_frame_run_1 = sprite_sheet.get_image(0,2,16,16,offset_v=8)
-    back_frame_run_2 = sprite_sheet.get_image(1,2,16,16,offset_v=8)
-    front_frame_run_1 = sprite_sheet.get_image(2,2,16,16,offset_v=8)
-    front_frame_run_2 = sprite_sheet.get_image(3,2,16,16,offset_v=8)
+
 
     dice = Dice(screen.get_width()/2, 350)
     all_sprites = pygame.sprite.Group(dice)
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     roll_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 60),"Roll")
+    player_start = entity_spawner(dungeon_map)
+    player = Player(player_start[1] * 16, player_start[0] * 16,16,16)
     running = True
     while running:
         screen.fill((0, 0, 0))
@@ -272,20 +259,13 @@ def game(screen, main_menu):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-                if event.key == pygame.K_w:
-                    pass
-                if event.key == pygame.K_a:
-                    pass
-                if event.key == pygame.K_s:
-                    pass
-                if event.key == pygame.K_d:
-                    pass
-
+                player.move(16,16,dungeon_map,event)
+        player.animation_loop()
         draw_dungeon(screen, dungeon_surface)
         all_sprites.update()
         all_sprites.draw(screen)
         roll_button.draw(screen)
         back_button.draw(screen)
-        screen.blit(back_frame_idle,(0,0))
+        screen.blit(player.current_frame, (player.x + offset_x, player.y + offset_y))
         pygame.display.flip()
         clock.tick(60)
