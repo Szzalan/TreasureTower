@@ -2,7 +2,6 @@ import math
 
 import pygame
 
-from assets import player
 from assets.button import Button
 import random
 
@@ -223,13 +222,16 @@ def dungeon_generator():
     carve_rooms(rooms, dungeon_map)
     carve_corridors(rooms, dungeon_map)
     dungeon_map = update_wall_boundaries(dungeon_map)
-    entity_spawner(dungeon_map)
+    trapdoor_pos = entity_spawner(dungeon_map)
+    entity_positions = {
+        'trapdoor' : trapdoor_pos,
+    }
 
-    return dungeon_map,rooms
+    return dungeon_map,rooms,trapdoor_pos,entity_positions
 
 def game(screen, main_menu):
     Room.load_images()
-    dungeon_map,rooms = dungeon_generator()
+    dungeon_map,rooms,trapdoor_pos,entity_pos = dungeon_generator()
     dungeon_surface = generate_dungeon_surface(dungeon_map)
     sprite_sheet_image = pygame.image.load("../assets/player_sheet.png").convert_alpha()
     sprite_sheet = spritesheet.HandleSpriteSheet(sprite_sheet_image)
@@ -239,7 +241,7 @@ def game(screen, main_menu):
     all_sprites = pygame.sprite.Group(dice)
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     roll_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 60),"Roll")
-    player_start = entity_spawner(dungeon_map)
+    player_start = trapdoor_pos
     player = Player(player_start[1] * 16, player_start[0] * 16,16,16)
     running = True
     while running:
