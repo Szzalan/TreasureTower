@@ -12,13 +12,10 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load("../assets/player_sheet.png")
         self.current_frame = None
         self.frame_index = 0
-        self.facing = 0
+        self.facing = "front"
         self.running = False
-        self.animation_timer = 0
-        self.animation_speed = 10
-
-        self.idle_timer = 0
-        self.idle_timeout = 30
+        self.pre_x = self.x
+        self.pre_y = self.y
 
         self.frames = {
             "right_idle": [],
@@ -39,30 +36,18 @@ class Player(pygame.sprite.Sprite):
         self.frames["back_idle"] = [sprite_sheet.get_image(2, 0, 16, 16, offset_v=8)]
         self.frames["front_idle"] = [sprite_sheet.get_image(3, 0, 16, 16, offset_v=8)]
         self.frames["right_run"] = [sprite_sheet.get_image(0, 1, 16, 16, offset_v=8),
-                                    sprite_sheet.get_image(1, 1, 16, 16, offset_v=8)]
-        self.frames["left_run"] = [sprite_sheet.get_image(2, 1, 16, 16, offset_v=8),
-                                   sprite_sheet.get_image(3, 1, 16, 16, offset_v=8)]
-        self.frames["back_run"] = [sprite_sheet.get_image(0, 2, 16, 16, offset_v=8),
+                                    sprite_sheet.get_image(0, 2, 16, 16, offset_v=8)]
+        self.frames["left_run"] = [sprite_sheet.get_image(1, 1, 16, 16, offset_v=8),
                                    sprite_sheet.get_image(1, 2, 16, 16, offset_v=8)]
-        self.frames["front_run"] = [sprite_sheet.get_image(2, 2, 16, 16, offset_v=8),
+        self.frames["back_run"] = [sprite_sheet.get_image(2, 1, 16, 16, offset_v=8),
+                                   sprite_sheet.get_image(2, 2, 16, 16, offset_v=8)]
+        self.frames["front_run"] = [sprite_sheet.get_image(3, 1, 16, 16, offset_v=8),
                                     sprite_sheet.get_image(3, 2, 16, 16, offset_v=8)]
         self.current_frame = self.frames["front_idle"][0]
 
     def animation_loop(self):
-        if self.running:
-            self.idle_timer = 0
-            animation_frames = self.frames[self.facing + "_run"]
-            self.animation_timer += 1
-            if self.animation_timer >= self.animation_speed:
-                self.animation_timer = 0
-                self.frame_index += (self.frame_index + 1) % len(animation_frames)
-                self.current_frame = animation_frames[self.frame_index]
-            else:
-                self.idle_timer += 1
-                if self.idle_timer >= self.idle_timeout:
-                    self.idle_timer = self.idle_timeout
-                    animation_frames = self.frames[self.facing + "_idle"]
-                    self.current_frame = animation_frames[0]
+        if not self.running:  # If player is not moving
+            self.current_frame = self.frames[self.facing + "_idle"][0]
 
     def move(self, dx, dy,dungeon_map, event):
         new_x = self.x
@@ -86,8 +71,21 @@ class Player(pygame.sprite.Sprite):
             self.facing = "right"
             self.running = True
 
+        if self.running:
+            animation_frames = self.frames.get(self.facing + "_run",[self.current_frame])
+            self.frame_index = (self.frame_index + 1) % len(animation_frames)
+            self.current_frame = animation_frames[self.frame_index]
+
         if dungeon_map[new_y // 16][new_x // 16] in ["FLOOR","TRAPDOOR","CORRIDOR"]:
             self.x = new_x
             self.y = new_y
+        else:
+            self.running = False
+
+        if self.x == self.pre_x and self.y == self.pre_y:
+            self.running = False
+
+        self.pre_x = self.x
+        self.pre_y = self.y
 
 

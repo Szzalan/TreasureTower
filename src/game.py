@@ -7,6 +7,7 @@ import random
 
 from assets.dice import Dice
 from assets.player import Player
+
 import assets.spritesheet as spritesheet
 
 pygame.init()
