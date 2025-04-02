@@ -51,9 +51,6 @@ class Enemy(pygame.sprite.Sprite):
             ]
         self.image = self.frames["idle"][0]
 
-        if self.image:
-            self.rect = self.image.get_rect(topleft=(self.x * 16, self.y * 16))
-
     def animation_loop(self, action="idle",current_time=0):
         if action in self.frames:
             if current_time - self.frame_timer > self.frame_delay:

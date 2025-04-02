@@ -17,22 +17,10 @@ FLOOR_HEIGHT = 500
 NUM_ROOMS = 5
 
 def entity_spawner(dungeon_map,rooms,enemy_types):
-    wall_list = []
-    floor_list = []
-    corner_list = []
     enemy_group = pygame.sprite.Group()
     entity_positions = {'trapdoor' : None, 'door' : None, 'enemies': []}
+    floor_list, wall_list, _ = sort_tile_types(dungeon_map)
 
-    for y,row in enumerate(dungeon_map):
-        for x,tile in enumerate(row):
-            if tile == "WALL":
-                if ((dungeon_map[y][x-1] == "WALL" or dungeon_map[y][x+1] == "WALL")
-                    and (dungeon_map[y-1][x] == "WALL" or dungeon_map[y+1][x] == "WALL")):
-                    corner_list.append((y,x))
-                else:
-                    wall_list.append((y,x))
-            if tile == "FLOOR":
-                floor_list.append((y,x))
     player_spawn = random.choice(floor_list)
     trapdoor_pos = player_spawn
     dungeon_map[player_spawn[0]][player_spawn[1]] = "TRAPDOOR"
@@ -42,24 +30,36 @@ def entity_spawner(dungeon_map,rooms,enemy_types):
     dungeon_map[door_spawn[0]][door_spawn[1]] = "DOOR"
     entity_positions['door'] = door_spawn
 
-    for room in rooms:
-        start_x = room.x // 16
-        start_Y = room.y // 16
-        end_x = room.x + room.width // 16
-        end_y = room.y + room.height // 16
+    floor_list.remove(player_spawn)
 
-        valid_tiles = [(x,y) for x in range(start_x,end_x)
-                       for y in range(start_Y,end_y)
-                       if dungeon_map[y][x] == "FLOOR"]
+    for _ in range(NUM_ROOMS):
 
-        if valid_tiles:
-            spawn_x, spawn_y = random.choice(valid_tiles)
-            enemy_type = random.choice(enemy_types)
-            enemy = Enemy(spawn_x,spawn_y,enemy_type)
-            enemy_group.add(enemy)
-            entity_positions['enemies'].append((spawn_x,spawn_y))
+        spawn_x, spawn_y = random.choice(floor_list)
+        enemy_type = random.choice(enemy_types)
+        enemy = Enemy(spawn_y,spawn_x,enemy_type)
+        enemy_group.add(enemy)
+        floor_list.remove((spawn_x,spawn_y))
+        entity_positions['enemies'].append((spawn_x,spawn_y))
 
     return player_spawn, enemy_group, entity_positions
+
+def sort_tile_types(dungeon_map):
+    floor_list = []
+    wall_list = []
+    corner_list = []
+
+    for y,row in enumerate(dungeon_map):
+        for x,tile in enumerate(row):
+            if tile == "WALL":
+                if ((dungeon_map[y][x-1] == "WALL" or dungeon_map[y][x+1] == "WALL")
+                    and (dungeon_map[y-1][x] == "WALL" or dungeon_map[y+1][x] == "WALL")):
+                    corner_list.append((y,x))
+                else:
+                    wall_list.append((y,x))
+            elif tile == "FLOOR":
+                floor_list.append((y,x))
+
+    return floor_list, wall_list, corner_list
 
 class Room:
     def __init__(self, x, y, width, height):
@@ -281,10 +281,11 @@ def game(screen, main_menu):
                 if event.key == pygame.K_ESCAPE:
                     running = False
                 player.move(16,16,dungeon_map,event)
-        enemy_group.update(current_time)
-        enemy_group.draw(screen)
         player.animation_loop()
         draw_dungeon(screen, dungeon_surface)
+        enemy_group.update(current_time)
+        for enemy in enemy_group:
+            screen.blit(enemy.image, (((enemy.x * 16) + offset_x), (enemy.y * 16) + offset_y))
         all_sprites.update()
         all_sprites.draw(screen)
         roll_button.draw(screen)
