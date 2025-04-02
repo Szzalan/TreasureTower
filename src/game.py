@@ -7,6 +7,7 @@ import random
 
 from assets.dice import Dice
 from assets.player import Player
+from assets.enemy import Enemy
 
 import assets.spritesheet as spritesheet
 
@@ -234,9 +235,13 @@ def game(screen, main_menu):
     Room.load_images()
     dungeon_map,rooms,trapdoor_pos,entity_pos = dungeon_generator()
     dungeon_surface = generate_dungeon_surface(dungeon_map)
-    sprite_sheet_image = pygame.image.load("../assets/player_sheet.png").convert_alpha()
-    sprite_sheet = spritesheet.HandleSpriteSheet(sprite_sheet_image)
-
+    slime = Enemy(5,5,"slime")
+    skeleton = Enemy(10,10,"skeleton")
+    zombie = Enemy(20,20,"zombie")
+    enemy_group = pygame.sprite.Group()
+    enemy_group.add(slime)
+    enemy_group.add(skeleton)
+    enemy_group.add(zombie)
 
     dice = Dice(screen.get_width()/2, 350)
     all_sprites = pygame.sprite.Group(dice)
@@ -246,6 +251,7 @@ def game(screen, main_menu):
     player = Player(player_start[1] * 16, player_start[0] * 16,16,16)
     running = True
     while running:
+        current_time = pygame.time.get_ticks()
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -263,6 +269,8 @@ def game(screen, main_menu):
                 if event.key == pygame.K_ESCAPE:
                     running = False
                 player.move(16,16,dungeon_map,event)
+        enemy_group.update(current_time)
+        enemy_group.draw(screen)
         player.animation_loop()
         draw_dungeon(screen, dungeon_surface)
         all_sprites.update()
