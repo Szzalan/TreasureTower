@@ -9,8 +9,6 @@ from assets.dice import Dice
 from assets.player import Player
 from assets.enemy import Enemy
 
-import assets.spritesheet as spritesheet
-
 pygame.init()
 clock = pygame.time.Clock()
 
@@ -18,10 +16,13 @@ FLOOR_WIDTH = 500
 FLOOR_HEIGHT = 500
 NUM_ROOMS = 5
 
-def entity_spawner(dungeon_map):
+def entity_spawner(dungeon_map,rooms,enemy_types):
     wall_list = []
     floor_list = []
     corner_list = []
+    enemy_group = pygame.sprite.Group()
+    entity_positions = {'trapdoor' : None, 'door' : None, 'enemies': []}
+
     for y,row in enumerate(dungeon_map):
         for x,tile in enumerate(row):
             if tile == "WALL":
@@ -33,11 +34,32 @@ def entity_spawner(dungeon_map):
             if tile == "FLOOR":
                 floor_list.append((y,x))
     player_spawn = random.choice(floor_list)
+    trapdoor_pos = player_spawn
+    dungeon_map[player_spawn[0]][player_spawn[1]] = "TRAPDOOR"
+    entity_positions['trapdoor'] = trapdoor_pos
+
     door_spawn = random.choice(wall_list)
     dungeon_map[door_spawn[0]][door_spawn[1]] = "DOOR"
-    dungeon_map[player_spawn[0]][player_spawn[1]] = "TRAPDOOR"
+    entity_positions['door'] = door_spawn
 
-    return player_spawn
+    for room in rooms:
+        start_x = room.x // 16
+        start_Y = room.y // 16
+        end_x = room.x + room.width // 16
+        end_y = room.y + room.height // 16
+
+        valid_tiles = [(x,y) for x in range(start_x,end_x)
+                       for y in range(start_Y,end_y)
+                       if dungeon_map[y][x] == "FLOOR"]
+
+        if valid_tiles:
+            spawn_x, spawn_y = random.choice(valid_tiles)
+            enemy_type = random.choice(enemy_types)
+            enemy = Enemy(spawn_x,spawn_y,enemy_type)
+            enemy_group.add(enemy)
+            entity_positions['enemies'].append((spawn_x,spawn_y))
+
+    return player_spawn, enemy_group, entity_positions
 
 class Room:
     def __init__(self, x, y, width, height):
@@ -224,30 +246,20 @@ def dungeon_generator():
     carve_rooms(rooms, dungeon_map)
     carve_corridors(rooms, dungeon_map)
     dungeon_map = update_wall_boundaries(dungeon_map)
-    trapdoor_pos = entity_spawner(dungeon_map)
-    entity_positions = {
-        'trapdoor' : trapdoor_pos,
-    }
+    player_spawn,enemy_group,entity_positions = entity_spawner(dungeon_map,rooms,["slime","skeleton","zombie"])
 
-    return dungeon_map,rooms,trapdoor_pos,entity_positions
+    return dungeon_map,rooms,player_spawn,enemy_group,entity_positions
 
 def game(screen, main_menu):
     Room.load_images()
-    dungeon_map,rooms,trapdoor_pos,entity_pos = dungeon_generator()
+    dungeon_map,rooms,player_spawn,enemy_group,entity_pos = dungeon_generator()
     dungeon_surface = generate_dungeon_surface(dungeon_map)
-    slime = Enemy(5,5,"slime")
-    skeleton = Enemy(10,10,"skeleton")
-    zombie = Enemy(20,20,"zombie")
-    enemy_group = pygame.sprite.Group()
-    enemy_group.add(slime)
-    enemy_group.add(skeleton)
-    enemy_group.add(zombie)
 
     dice = Dice(screen.get_width()/2, 350)
     all_sprites = pygame.sprite.Group(dice)
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     roll_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 60),"Roll")
-    player_start = trapdoor_pos
+    player_start = player_spawn
     player = Player(player_start[1] * 16, player_start[0] * 16,16,16)
     running = True
     while running:
