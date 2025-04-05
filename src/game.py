@@ -8,6 +8,7 @@ import random
 from assets.dice import Dice
 from assets.player import Player
 from assets.enemy import Enemy
+import combat
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -16,7 +17,12 @@ FLOOR_WIDTH = 500
 FLOOR_HEIGHT = 500
 NUM_ROOMS = 5
 
-def entity_spawner(dungeon_map,rooms,enemy_types):
+class GameStates:
+    EXPLORATION = "exploration"
+    COMBAT = "combat"
+
+def entity_spawner(dungeon_map,enemy_types):
+    """SPAWNS THE ENTITIES IN THE DUNGEON"""
     enemy_group = pygame.sprite.Group()
     entity_positions = {'trapdoor' : None, 'door' : None, 'enemies': []}
     floor_list, wall_list, _ = sort_tile_types(dungeon_map)
@@ -246,7 +252,7 @@ def dungeon_generator():
     carve_rooms(rooms, dungeon_map)
     carve_corridors(rooms, dungeon_map)
     dungeon_map = update_wall_boundaries(dungeon_map)
-    player_spawn,enemy_group,entity_positions = entity_spawner(dungeon_map,rooms,["slime","skeleton","zombie"])
+    player_spawn,enemy_group,entity_positions = entity_spawner(dungeon_map,["slime","skeleton","zombie"])
 
     return dungeon_map,rooms,player_spawn,enemy_group,entity_positions
 
@@ -254,6 +260,7 @@ def game(screen, main_menu):
     Room.load_images()
     dungeon_map,rooms,player_spawn,enemy_group,entity_pos = dungeon_generator()
     dungeon_surface = generate_dungeon_surface(dungeon_map)
+    state = GameStates.EXPLORATION
 
     dice = Dice(screen.get_width()/2, 350)
     all_sprites = pygame.sprite.Group(dice)
@@ -281,6 +288,15 @@ def game(screen, main_menu):
                 if event.key == pygame.K_ESCAPE:
                     running = False
                 player.move(16,16,dungeon_map,event)
+            if state == GameStates.EXPLORATION:
+                for enemy in enemy_group:
+                    if enemy.interact(event,player):
+                        state = GameStates.COMBAT
+                        current_enemy = enemy
+                        combat.combat(screen,main_menu,current_enemy.enemy_type)
+                        state = GameStates.EXPLORATION
+                        current_enemy.kill()
+                        break
         player.animation_loop()
         draw_dungeon(screen, dungeon_surface)
         enemy_group.update(current_time)

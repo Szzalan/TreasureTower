@@ -21,6 +21,7 @@ class Dice(pygame.sprite.Sprite):
         self.current_frame_index = 0
         self.frame_counter = 0
         self.ground_level = y
+        self.landed_index = None
 
     @staticmethod
     def angled_dice():
@@ -64,6 +65,7 @@ class Dice(pygame.sprite.Sprite):
 
         elif not self.has_landed:
             self.image = random.choice(self.front_frames)
+            self.landed_index = self.front_frames.index(self.image)
             self.has_landed = True
 
     def apply_gravity(self):
@@ -87,7 +89,15 @@ class Dice(pygame.sprite.Sprite):
                 self.bounced = False
                 self.x_offset = 0
                 self.start = True
+
     def update(self):
         self.frame_counter += 1
         self.roll_animation()
         self.apply_gravity()
+
+    def roll_value(self):
+        if self.landed_index is not None:
+            if self.landed_index == 5:
+                return (self.landed_index + 1) * 2
+            return self.landed_index + 1
+        return None

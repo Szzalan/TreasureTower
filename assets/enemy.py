@@ -17,6 +17,7 @@ class Enemy(pygame.sprite.Sprite):
         self.frame_delay = frame_delay
         self.load_sprite_sheet()
         self.load_frames()
+        self.rect = pygame.Rect(self.x * 16, self.y * 16, 16, 16)
 
     def load_sprite_sheet(self):
         if self.enemy_type == "slime":
@@ -60,6 +61,7 @@ class Enemy(pygame.sprite.Sprite):
 
     def update(self,current_time):
         self.animation_loop(action="idle",current_time=current_time)
+        self.rect.topleft = (self.x * 16, self.y * 16)
 
     def check_interact(self,player):
         #check for diagonal places
@@ -69,7 +71,10 @@ class Enemy(pygame.sprite.Sprite):
             return False
 
     def interact(self,event,player):
-        if event.key == pygame.K_e and self.check_interact(player):
+        player_rect = pygame.Rect(player.x, player.y, player.width, player.height)
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_e and self.check_interact(player):
+            return True
+        elif self.rect.colliderect(player_rect):
             return True
         else:
             return False

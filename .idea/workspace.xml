@@ -5,10 +5,99 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="599ad302-b834-4bb0-8c7b-7b05988ef3e9" name="Changes" comment="Added enemy functionality and animations">
-      <change beforePath="$PROJECT_DIR$/.idea/TreasureTower.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TreasureTower.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/combat_enemy.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/combat_player.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/button.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/button.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/1920X1080/0.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/1920X1080/0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/1920X1080/1.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/1920X1080/1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/1920X1080/2.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/1920X1080/2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/1920X1080/3.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/1920X1080/3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/1920X1080/4.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/1920X1080/4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/1920X1080/5.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/1920X1080/5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/320X180/0.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/320X180/0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/320X180/1.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/320X180/1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/320X180/2.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/320X180/2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/320X180/3.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/320X180/3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/320X180/4.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/320X180/4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/320X180/5.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/320X180/5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/OldDungeon.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/OldDungeon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/OldDungeon.psd" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/OldDungeon.psd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Old Dungeon/OldDungeon320X180.png" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_elements/Old_dungeon/OldDungeon320X180.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_With_VFX/Skeleton_01_White_Attack1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_With_VFX/Skeleton_01_White_Attack2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_With_VFX/Skeleton_01_White_Die.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_With_VFX/Skeleton_01_White_Hurt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_With_VFX/Skeleton_01_White_Idle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_With_VFX/Skeleton_01_White_Walk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_Without_VFX/Skeleton_01_White_Attack1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_Without_VFX/Skeleton_01_White_Attack2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_Without_VFX/Skeleton_01_White_Die.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_Without_VFX/Skeleton_01_White_Hurt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_Without_VFX/Skeleton_01_White_Idle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_Without_VFX/Skeleton_01_White_Walk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_Yellow/Skeleton_With_VFX/Skeleton_01_Yellow_Attack1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_Yellow/Skeleton_With_VFX/Skeleton_01_Yellow_Attack2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_Yellow/Skeleton_With_VFX/Skeleton_01_Yellow_Die.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_Yellow/Skeleton_With_VFX/Skeleton_01_Yellow_Hurt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_Yellow/Skeleton_With_VFX/Skeleton_01_Yellow_Idle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_Yellow/Skeleton_With_VFX/Skeleton_01_Yellow_Walk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_Yellow/Skeleton_Without_VFX/Skeleton_01_Yellow_Attack1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_Yellow/Skeleton_Without_VFX/Skeleton_01_Yellow_Attack2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_Yellow/Skeleton_Without_VFX/Skeleton_01_Yellow_Die.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_Yellow/Skeleton_Without_VFX/Skeleton_01_Yellow_Hurt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_Yellow/Skeleton_Without_VFX/Skeleton_01_Yellow_Idle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/Skeletons_Free_Pack/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_Yellow/Skeleton_Without_VFX/Skeleton_01_Yellow_Walk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/__MACOSX/pack_loreon_char_free/._.DS_Store" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/__MACOSX/pack_loreon_char_free/sword_1/._.DS_Store" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/attack1_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/attack1_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/attack1_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/attack1_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/attack1_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/attack1_6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/attack4_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/attack4_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/attack4_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/attack4_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/attack4_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/attack4_6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/fall_back_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/fall_back_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/fall_back_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/fall_back_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/fall_back_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/hit_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/hit_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/hit_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/jump_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/jump_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/jump_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/jump_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/jump_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/ready_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/ready_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/ready_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/run_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/run_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/run_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/run_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/run_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/run_6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/stand_up_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/stand_up_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/stand_up_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/stand_up_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/stand_up_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/walk_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/walk_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/walk_3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/walk_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/walk_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_elements/pack_loreon_char_free/sword_1/walk_6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/dice.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/dice.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/enemy.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/enemy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/combat.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/combat.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/game.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,6 +127,9 @@
     &quot;accountId&quot;: &quot;b4f2dc7f-e167-41af-8a36-e6430c9dcd8b&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -47,57 +139,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.Main.executor": "Run",
-    "Python.button.executor": "Run",
-    "Python.game.executor": "Debug",
-    "Python.how_to_play.executor": "Run",
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/zalan/PycharmProjects/TreasureTower/src/main.py",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.button.executor&quot;: &quot;Run&quot;,
+    &quot;Python.game.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.how_to_play.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/zalan/PycharmProjects/TreasureTower&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\zalan\PycharmProjects\TreasureTower\src" />
     </key>
-  </component>
-  <component name="RunManager">
-    <configuration name="Main" type="PythonConfigurationType" factoryName="Python">
-      <module name="TreasureTower" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.13 (TreasureTower)" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="src.main" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="true" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -177,6 +243,8 @@
       <workItem from="1743170379091" duration="13259000" />
       <workItem from="1743419422034" duration="7285000" />
       <workItem from="1743505988907" duration="19268000" />
+      <workItem from="1743764942310" duration="8981000" />
+      <workItem from="1743854412183" duration="17918000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -334,9 +402,9 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/TreasureTower$how_to_play.coverage" NAME="how_to_play Coverage Results" MODIFIED="1743561058244" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
-    <SUITE FILE_PATH="coverage/TreasureTower$main.coverage" NAME="main Coverage Results" MODIFIED="1743628165091" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
-    <SUITE FILE_PATH="coverage/TreasureTower$Main.coverage" NAME="Main Coverage Results" MODIFIED="1743620173194" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/TreasureTower$main.coverage" NAME="main Coverage Results" MODIFIED="1743859483095" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/TreasureTower$Main.coverage" NAME="Main Coverage Results" MODIFIED="1743682105990" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/TreasureTower$button.coverage" NAME="button Coverage Results" MODIFIED="1740500624619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/assets" />
-    <SUITE FILE_PATH="coverage/TreasureTower$game.coverage" NAME="game Coverage Results" MODIFIED="1743624078664" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/TreasureTower$game.coverage" NAME="game Coverage Results" MODIFIED="1743628250285" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
 </project>
