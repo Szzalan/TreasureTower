@@ -20,6 +20,7 @@ NUM_ROOMS = 5
 class GameStates:
     EXPLORATION = "exploration"
     COMBAT = "combat"
+
 def return_to_exploration(screen,main_menu):
     print("Returning to exploration mode!")
     # Set the game state to exploration
@@ -57,7 +58,14 @@ def entity_spawner(dungeon_map,enemy_types):
 
     return player_spawn, enemy_group, entity_positions
 
-def door_interact(door_spawn,player_pos,event):
+def door_message(screen,message):
+    if message:
+        font = pygame.font.Font("../assets/Pixeltype.ttf",36)
+        text_surf = font.render(message,False,(255,255,255))
+        text_rect = text_surf.get_rect(center=(screen.get_width()/2,650))
+        screen.blit(text_surf,text_rect)
+
+def door_interact(door_spawn,player_pos,event,enemy_group):
     adjacent_positions = [
         (door_spawn[0] + 1, door_spawn[1]),  # Right
         (door_spawn[0] - 1, door_spawn[1]),  # Left
@@ -66,9 +74,10 @@ def door_interact(door_spawn,player_pos,event):
     ]
     if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
         if player_pos in adjacent_positions:
-            print("Door opened!")
-            return True
-    else:
+            if len(enemy_group) > 0:
+                return "Kill all enemies to progress to the next floor"
+            else:
+                return True
         return False
 
 
@@ -280,6 +289,8 @@ def dungeon_generator():
     return dungeon_map,rooms,player_spawn,enemy_group,entity_positions
 
 def game(screen, main_menu):
+    message = ""
+    message_duration = 0
     Room.load_images()
     dungeon_map,rooms,player_spawn,enemy_group,entity_pos = dungeon_generator()
     dungeon_surface = generate_dungeon_surface(dungeon_map)
@@ -311,8 +322,12 @@ def game(screen, main_menu):
                 if event.key == pygame.K_ESCAPE:
                     running = False
                 player.move(16,16,dungeon_map,event)
-                door_interact(entity_pos['door'], (player.y // 16, player.x // 16),event)
-
+                door_result = door_interact(entity_pos['door'], (player.y // 16, player.x // 16),event,enemy_group)
+                if isinstance(door_result, str):
+                    message = door_result
+                    message_duration = current_time + 2000
+                elif door_result:
+                    message = ""
             if state == GameStates.EXPLORATION:
                 for enemy in enemy_group:
                     if enemy.interact(event,player):
@@ -333,5 +348,7 @@ def game(screen, main_menu):
         roll_button.draw(screen)
         back_button.draw(screen)
         screen.blit(player.current_frame, (player.x + offset_x, player.y + offset_y))
+        if message and current_time <= message_duration:
+            door_message(screen, message)
         pygame.display.flip()
         clock.tick(60)
