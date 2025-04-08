@@ -42,8 +42,8 @@ def entity_spawner(dungeon_map,enemy_types):
 
     door_spawn = random.choice(wall_list)
     dungeon_map[door_spawn[0]][door_spawn[1]] = "DOOR"
-    entity_positions['door'] = door_spawn
 
+    entity_positions['door'] = door_spawn
     floor_list.remove(player_spawn)
 
     for _ in range(NUM_ROOMS):
@@ -56,6 +56,21 @@ def entity_spawner(dungeon_map,enemy_types):
         entity_positions['enemies'].append((spawn_x,spawn_y))
 
     return player_spawn, enemy_group, entity_positions
+
+def door_interact(door_spawn,player_pos,event):
+    adjacent_positions = [
+        (door_spawn[0] + 1, door_spawn[1]),  # Right
+        (door_spawn[0] - 1, door_spawn[1]),  # Left
+        (door_spawn[0], door_spawn[1] + 1),  # Down
+        (door_spawn[0], door_spawn[1] - 1)  # Up
+    ]
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
+        if player_pos in adjacent_positions:
+            print("Door opened!")
+            return True
+    else:
+        return False
+
 
 def sort_tile_types(dungeon_map):
     floor_list = []
@@ -296,6 +311,7 @@ def game(screen, main_menu):
                 if event.key == pygame.K_ESCAPE:
                     running = False
                 player.move(16,16,dungeon_map,event)
+                door_interact(entity_pos['door'], (player.y // 16, player.x // 16),event)
 
             if state == GameStates.EXPLORATION:
                 for enemy in enemy_group:

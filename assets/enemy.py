@@ -65,16 +65,17 @@ class Enemy(pygame.sprite.Sprite):
 
     def check_interact(self,player):
         #check for diagonal places
-        if ((self.x == player.x+1 or self.x == player.x-1) and self.y == player.y) or ((self.y == player.y+1 or self.y == player.y-1) and self.x == player.x):
+        if ((self.x * 16== player.x+1 or self.x * 16 == player.x-1) and self.y * 16== player.y) or ((self.y * 16 == player.y+1 * 16 or self.y * 16== player.y-1) and self.x * 16 == player.x):
             return True
         else:
             return False
 
     def interact(self,event,player):
         player_rect = pygame.Rect(player.x, player.y, player.width, player.height)
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_e and self.check_interact(player):
-            return True
-        elif self.rect.colliderect(player_rect):
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
+            if self.check_interact(player):
+                return True
+        if self.rect.colliderect(player_rect):
             return True
         else:
             return False
