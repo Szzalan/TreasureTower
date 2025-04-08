@@ -28,10 +28,35 @@ class CombatPlayer(pygame.sprite.Sprite):
         if self.state == "hurt":
             self.sprite_sheet = pygame.image.load("../assets/combat_elements/Knight_1/Hurt.png").convert_alpha()
         if self.state == "death":
-            self.sprite_sheet = pygame.image.load("../assets/combat_elements/Knight_1/Death.png").convert_alpha()
+            self.sprite_sheet = pygame.image.load("../assets/combat_elements/Knight_1/Dead.png").convert_alpha()
 
     def load_frames(self):
         sprite_loader = HandleSpriteSheet(self.sprite_sheet)
+        self.frames["idle"] = [
+            sprite_loader.get_image(0, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(1, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(2, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(3, 0, 128, 128, offset_h=8),
+        ]
+        self.frames["attack"] = [
+            sprite_loader.get_image(0, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(1, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(2, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(3, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(4, 0, 128, 128, offset_h=8),
+        ]
+        self.frames["hurt"] = [
+            sprite_loader.get_image(0, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(1, 0, 128, 128, offset_h=8)
+        ]
+        self.frames["death"] = [
+            sprite_loader.get_image(0, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(1, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(2, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(3, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(4, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(5, 0, 128, 128, offset_h=8)
+        ]
         if self.frames[self.state]:
             self.image = self.frames[self.state][0]
             self.rect = self.image.get_rect(topleft=(self.x,self.y))
@@ -57,3 +82,19 @@ class CombatPlayer(pygame.sprite.Sprite):
             self.animate()
         if self.current_health <= 0 and self.state != "death":
             self.change_state("death")
+
+    def take_damage(self,damage):
+        self.current_health -= damage
+        if self.current_health > 0:
+            self.change_state("hurt")
+        else:
+            self.change_state("death")
+            print("Player has died!")
+
+    def attack(self,enemy,dice_roll_value):
+        if self.state in ["attack","death"]:
+            return
+        self.change_state("attack")
+        attack_damage = self.damage + dice_roll_value
+        print(f"Player attacks for {attack_damage} damage!")
+        enemy.take_damage(attack_damage)

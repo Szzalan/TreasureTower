@@ -288,6 +288,7 @@ def game(screen, main_menu):
                 if event.key == pygame.K_ESCAPE:
                     running = False
                 player.move(16,16,dungeon_map,event)
+
             if state == GameStates.EXPLORATION:
                 for enemy in enemy_group:
                     if enemy.interact(event,player):
