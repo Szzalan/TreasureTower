@@ -17,8 +17,6 @@ def how_to_play(screen, main_menu):
     informations2 = pygame.font.Font("../assets/Pixeltype.ttf", 30).render(text2, False, (255, 255, 255))
     informations3 = pygame.font.Font("../assets/Pixeltype.ttf", 30).render(text3, False, (255, 255, 255))
     informations4 = pygame.font.Font("../assets/Pixeltype.ttf", 30).render(text4, False, (255, 255, 255))
-    enemy = CombatEnemy(screen.get_width() / 2 + 100,screen.get_height() / 2,"skeleton",10,10)
-    enemy.change_state("hurt")
     running = True
     bg = pygame.image.load("../assets/background/fallen_kingdom_1280x720.png").convert()
     scroll = 0
@@ -44,9 +42,6 @@ def how_to_play(screen, main_menu):
         scroll -= 3
         if abs(scroll) > bg.get_width():
             scroll = 0
-        enemy.animate()
-        enemy.update()
-        screen.blit(enemy.image, enemy.rect.topleft)
         pygame.draw.rect(screen, (0, 0, 0), (390,100, 740, 100),border_radius=10)
         screen.blit(informations, (screen.get_width()/2-informations.get_width()/2, screen.get_height()/2-250))
         screen.blit(informations2, (screen.get_width()/2-informations.get_width()/2, screen.get_height()/2-230))

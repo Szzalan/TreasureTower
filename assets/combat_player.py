@@ -33,29 +33,29 @@ class CombatPlayer(pygame.sprite.Sprite):
     def load_frames(self):
         sprite_loader = HandleSpriteSheet(self.sprite_sheet)
         self.frames["idle"] = [
-            sprite_loader.get_image(0, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(1, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(2, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(3, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(0, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(1, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(2, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(3, 0, 128, 128, offset_h=8, scale=4),
         ]
         self.frames["attack"] = [
-            sprite_loader.get_image(0, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(1, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(2, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(3, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(4, 0, 128, 128, offset_h=8),
+            sprite_loader.get_image(0, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(1, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(2, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(3, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(4, 0, 128, 128, offset_h=8, scale=4),
         ]
         self.frames["hurt"] = [
-            sprite_loader.get_image(0, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(1, 0, 128, 128, offset_h=8)
+            sprite_loader.get_image(0, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(1, 0, 128, 128, offset_h=8, scale=4)
         ]
         self.frames["death"] = [
-            sprite_loader.get_image(0, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(1, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(2, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(3, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(4, 0, 128, 128, offset_h=8),
-            sprite_loader.get_image(5, 0, 128, 128, offset_h=8)
+            sprite_loader.get_image(0, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(1, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(2, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(3, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(4, 0, 128, 128, offset_h=8, scale=4),
+            sprite_loader.get_image(5, 0, 128, 128, offset_h=8, scale=4)
         ]
         if self.frames[self.state]:
             self.image = self.frames[self.state][0]
@@ -85,6 +85,7 @@ class CombatPlayer(pygame.sprite.Sprite):
 
     def take_damage(self,damage):
         self.current_health -= damage
+        print(f"Player takes {damage} damage! Current health: {self.current_health}")
         if self.current_health > 0:
             self.change_state("hurt")
         else:
@@ -96,5 +97,6 @@ class CombatPlayer(pygame.sprite.Sprite):
             return
         self.change_state("attack")
         attack_damage = self.damage + dice_roll_value
+        print(f"Dice roll value {dice_roll_value}, damage {self.damage}")
         print(f"Player attacks for {attack_damage} damage!")
         enemy.take_damage(attack_damage)

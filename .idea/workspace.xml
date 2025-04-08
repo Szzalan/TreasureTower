@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="599ad302-b834-4bb0-8c7b-7b05988ef3e9" name="Changes" comment="Added WIP combat mechanics and animations">
+    <list default="true" id="599ad302-b834-4bb0-8c7b-7b05988ef3e9" name="Changes" comment="Fixed enemy sprites">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/combat_enemy.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_enemy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/combat_player.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/spritesheet.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/spritesheet.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/combat.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/combat.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/game.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/how_to_play.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/how_to_play.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,28 +50,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.button.executor&quot;: &quot;Run&quot;,
-    &quot;Python.combat.executor&quot;: &quot;Run&quot;,
-    &quot;Python.game.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.how_to_play.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/zalan/PycharmProjects/TreasureTower&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Main.executor": "Run",
+    "Python.button.executor": "Run",
+    "Python.combat.executor": "Run",
+    "Python.combat_enemy.executor": "Run",
+    "Python.game.executor": "Debug",
+    "Python.how_to_play.executor": "Run",
+    "Python.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/zalan/PycharmProjects/TreasureTower",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\zalan\PycharmProjects\TreasureTower\src" />
@@ -163,7 +162,7 @@
       <workItem from="1743968990755" duration="4190000" />
       <workItem from="1744018536844" duration="2279000" />
       <workItem from="1744047280770" duration="1996000" />
-      <workItem from="1744099803142" duration="10193000" />
+      <workItem from="1744099803142" duration="14783000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -293,7 +292,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743897142723</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Fixed enemy sprites">
+      <option name="closed" value="true" />
+      <created>1744120684947</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1744120684947</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -326,13 +333,15 @@
     <MESSAGE value="Added enemy class and sprites for enemies" />
     <MESSAGE value="Added enemy functionality and animations" />
     <MESSAGE value="Added WIP combat mechanics and animations" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added WIP combat mechanics and animations" />
+    <MESSAGE value="Fixed enemy sprites" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed enemy sprites" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/TreasureTower$how_to_play.coverage" NAME="how_to_play Coverage Results" MODIFIED="1744119975417" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
-    <SUITE FILE_PATH="coverage/TreasureTower$combat.coverage" NAME="combat Coverage Results" MODIFIED="1743942239934" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
-    <SUITE FILE_PATH="coverage/TreasureTower$main.coverage" NAME="main Coverage Results" MODIFIED="1744120573437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/TreasureTower$combat.coverage" NAME="combat Coverage Results" MODIFIED="1744123542413" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/TreasureTower$main.coverage" NAME="main Coverage Results" MODIFIED="1744124813164" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/TreasureTower$Main.coverage" NAME="Main Coverage Results" MODIFIED="1743682105990" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/TreasureTower$combat_enemy.coverage" NAME="combat_enemy Coverage Results" MODIFIED="1744123333222" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/assets" />
     <SUITE FILE_PATH="coverage/TreasureTower$button.coverage" NAME="button Coverage Results" MODIFIED="1740500624619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/assets" />
     <SUITE FILE_PATH="coverage/TreasureTower$game.coverage" NAME="game Coverage Results" MODIFIED="1743628250285" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>

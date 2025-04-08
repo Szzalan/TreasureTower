@@ -21,7 +21,7 @@ ENEMY_STATS = {
 }
 
 class CombatEnemy(pygame.sprite.Sprite):
-    def __init__(self,x,y,enemy_type,max_health,damage,frame_delay=250):
+    def __init__(self,x,y,enemy_type,frame_delay=250):
         super().__init__()
         stats = ENEMY_STATS.get(enemy_type)
         self.x = x
@@ -55,104 +55,104 @@ class CombatEnemy(pygame.sprite.Sprite):
         sprite_loader = HandleSpriteSheet(self.sprite_sheet)
         if self.enemy_type == "slime":
             self.frames["idle"] = [
-                sprite_loader.get_image(0, 0, 24, 16, offset_h=4, scale=3),
-                sprite_loader.get_image(1, 0, 24, 16, offset_h=4, scale=3)
+                sprite_loader.get_image(0, 0, 24, 16, offset_h=4, scale=10),
+                sprite_loader.get_image(1, 0, 24, 16, offset_h=4, scale=10)
             ]
             self.frames["attack"] = [
-                sprite_loader.get_image(0, 1, 24, 16, offset_h=4,scale=3),
-                sprite_loader.get_image(1, 1, 24, 16, offset_h=4,scale=3),
-                sprite_loader.get_image(2, 1, 24, 16, offset_h=4,scale=3),
-                sprite_loader.get_image(3, 1, 24, 16, offset_h=4,scale=3)
+                sprite_loader.get_image(0, 1, 24, 16, offset_h=4,scale=10),
+                sprite_loader.get_image(1, 1, 24, 16, offset_h=4,scale=10),
+                sprite_loader.get_image(2, 1, 24, 16, offset_h=4,scale=10),
+                sprite_loader.get_image(3, 1, 24, 16, offset_h=4,scale=10)
             ]
             self.frames["hurt"] = [
-                sprite_loader.get_image(0, 2, 24, 16, offset_h=4, scale=3),
-                sprite_loader.get_image(0, 0, 24, 16, offset_h=4, scale=3),
-                sprite_loader.get_image(1, 0, 24, 16, offset_h=4, scale=3)
+                sprite_loader.get_image(0, 2, 24, 16, offset_h=4, scale=10),
+                sprite_loader.get_image(0, 0, 24, 16, offset_h=4, scale=10),
+                sprite_loader.get_image(1, 0, 24, 16, offset_h=4, scale=10)
             ]
             self.frames["death"] = [
-                sprite_loader.get_image(0, 2, 24, 16, offset_h=4, scale=3),
-                sprite_loader.get_image(1, 2, 24, 16, offset_h=4, scale=3),
-                sprite_loader.get_image(2, 2, 24, 16, offset_h=4, scale=3),
-                sprite_loader.get_image(3, 2, 24, 16, offset_h=4, scale=3)
+                sprite_loader.get_image(0, 2, 24, 16, offset_h=4, scale=10),
+                sprite_loader.get_image(1, 2, 24, 16, offset_h=4, scale=10),
+                sprite_loader.get_image(2, 2, 24, 16, offset_h=4, scale=10),
+                sprite_loader.get_image(3, 2, 24, 16, offset_h=4, scale=10)
             ]
         if self.enemy_type == "zombie":
             self.frames["idle"] = [
-                sprite_loader.get_image(0, 0, 32, 32, scale=3),
-                sprite_loader.get_image(1, 0, 32, 32, scale=3),
-                sprite_loader.get_image(2, 0, 32, 32, scale=3),
-                sprite_loader.get_image(3, 0, 32, 32, scale=3),
-                sprite_loader.get_image(4, 0, 32, 32, scale=3),
-                sprite_loader.get_image(5, 0, 32, 32, scale=3),
-                sprite_loader.get_image(6, 0, 32, 32, scale=3),
-                sprite_loader.get_image(7, 0, 32, 32, scale=3)
+                sprite_loader.get_image(0, 0, 32, 32, scale=8),
+                sprite_loader.get_image(1, 0, 32, 32, scale=8),
+                sprite_loader.get_image(2, 0, 32, 32, scale=8),
+                sprite_loader.get_image(3, 0, 32, 32, scale=8),
+                sprite_loader.get_image(4, 0, 32, 32, scale=8),
+                sprite_loader.get_image(5, 0, 32, 32, scale=8),
+                sprite_loader.get_image(6, 0, 32, 32, scale=8),
+                sprite_loader.get_image(7, 0, 32, 32, scale=8)
             ]
             self.frames["attack"] = [
-                sprite_loader.get_image(0, 1, 32, 32, scale=3),
-                sprite_loader.get_image(1, 1, 32, 32, scale=3),
-                sprite_loader.get_image(2, 1, 32, 32, scale=3),
-                sprite_loader.get_image(3, 1, 32, 32, scale=3),
-                sprite_loader.get_image(4, 1, 32, 32, scale=3),
-                sprite_loader.get_image(5, 1, 32, 32, scale=3),
-                sprite_loader.get_image(6, 1, 32, 32, scale=3)
+                sprite_loader.get_image(0, 1, 32, 32, scale=8),
+                sprite_loader.get_image(1, 1, 32, 32, scale=8),
+                sprite_loader.get_image(2, 1, 32, 32, scale=8),
+                sprite_loader.get_image(3, 1, 32, 32, scale=8),
+                sprite_loader.get_image(4, 1, 32, 32, scale=8),
+                sprite_loader.get_image(5, 1, 32, 32, scale=8),
+                sprite_loader.get_image(6, 1, 32, 32, scale=8)
             ]
             self.frames["hurt"] = [
-                sprite_loader.get_image(0, 5, 32, 32, scale=3),
-                sprite_loader.get_image(1, 5, 32, 32, scale=3),
-                sprite_loader.get_image(2, 5, 32, 32, scale=3),
-                sprite_loader.get_image(3, 5, 32, 32, scale=3)
+                sprite_loader.get_image(0, 5, 32, 32, scale=8),
+                sprite_loader.get_image(1, 5, 32, 32, scale=8),
+                sprite_loader.get_image(2, 5, 32, 32, scale=8),
+                sprite_loader.get_image(3, 5, 32, 32, scale=8)
             ]
             self.frames["death"] = [
-                sprite_loader.get_image(0, 5, 32, 32, scale=3),
-                sprite_loader.get_image(1, 5, 32, 32, scale=3),
-                sprite_loader.get_image(2, 5, 32, 32, scale=3),
-                sprite_loader.get_image(3, 5, 32, 32, scale=3),
-                sprite_loader.get_image(4, 5, 32, 32, scale=3),
-                sprite_loader.get_image(5, 5, 32, 32, scale=3),
-                sprite_loader.get_image(6, 5, 32, 32, scale=3),
-                sprite_loader.get_image(7, 5, 32, 32, scale=3)
+                sprite_loader.get_image(0, 5, 32, 32, scale=8),
+                sprite_loader.get_image(1, 5, 32, 32, scale=8),
+                sprite_loader.get_image(2, 5, 32, 32, scale=8),
+                sprite_loader.get_image(3, 5, 32, 32, scale=8),
+                sprite_loader.get_image(4, 5, 32, 32, scale=8),
+                sprite_loader.get_image(5, 5, 32, 32, scale=8),
+                sprite_loader.get_image(6, 5, 32, 32, scale=8),
+                sprite_loader.get_image(7, 5, 32, 32, scale=8)
             ]
         if self.enemy_type == "skeleton":
             self.frames["idle"] = [
-                sprite_loader.get_image(0, 3, 64, 64, scale=2),
-                sprite_loader.get_image(1, 3, 64, 64, scale=2),
-                sprite_loader.get_image(2, 3, 64, 64, scale=2),
-                sprite_loader.get_image(3, 3, 64, 64, scale=2)
+                sprite_loader.get_image(0, 3, 64, 64, scale=6),
+                sprite_loader.get_image(1, 3, 64, 64, scale=6),
+                sprite_loader.get_image(2, 3, 64, 64, scale=6),
+                sprite_loader.get_image(3, 3, 64, 64, scale=6)
             ]
             self.frames["attack"] = [
-                sprite_loader.get_image(0, 0, 64, 64, scale=2),
-                sprite_loader.get_image(1, 0, 64, 64, scale=2),
-                sprite_loader.get_image(2, 0, 64, 64, scale=2),
-                sprite_loader.get_image(3, 0, 64, 64, scale=2),
-                sprite_loader.get_image(4, 0, 64, 64, scale=2),
-                sprite_loader.get_image(5, 0, 64, 64, scale=2),
-                sprite_loader.get_image(6, 0, 64, 64, scale=2),
-                sprite_loader.get_image(7, 0, 64, 64, scale=2),
-                sprite_loader.get_image(8, 0, 64, 64, scale=2),
-                sprite_loader.get_image(9, 0, 64, 64, scale=2),
-                sprite_loader.get_image(10, 0, 64, 64, scale=2),
-                sprite_loader.get_image(11, 0, 64, 64, scale=2),
-                sprite_loader.get_image(12, 0, 64, 64, scale=2)
+                sprite_loader.get_image(0, 0, 64, 64, scale=6),
+                sprite_loader.get_image(1, 0, 64, 64, scale=6),
+                sprite_loader.get_image(2, 0, 64, 64, scale=6),
+                sprite_loader.get_image(3, 0, 64, 64, scale=6),
+                sprite_loader.get_image(4, 0, 64, 64, scale=6),
+                sprite_loader.get_image(5, 0, 64, 64, scale=6),
+                sprite_loader.get_image(6, 0, 64, 64, scale=6),
+                sprite_loader.get_image(7, 0, 64, 64, scale=6),
+                sprite_loader.get_image(8, 0, 64, 64, scale=6),
+                sprite_loader.get_image(9, 0, 64, 64, scale=6),
+                sprite_loader.get_image(10, 0, 64, 64, scale=6),
+                sprite_loader.get_image(11, 0, 64, 64, scale=6),
+                sprite_loader.get_image(12, 0, 64, 64, scale=6)
             ]
             self.frames["hurt"] = [
-                sprite_loader.get_image(0, 4, 64, 64, scale=2),
-                sprite_loader.get_image(1, 4, 64, 64, scale=2),
-                sprite_loader.get_image(2, 4, 64, 64, scale=2),
+                sprite_loader.get_image(0, 4, 64, 64, scale=6),
+                sprite_loader.get_image(1, 4, 64, 64, scale=6),
+                sprite_loader.get_image(2, 4, 64, 64, scale=6),
 
             ]
             self.frames["death"] = [
-                sprite_loader.get_image(0, 1, 64, 64, scale=2),
-                sprite_loader.get_image(1, 1, 64, 64, scale=2),
-                sprite_loader.get_image(2, 1, 64, 64, scale=2),
-                sprite_loader.get_image(3, 1, 64, 64, scale=2),
-                sprite_loader.get_image(4, 1, 64, 64, scale=2),
-                sprite_loader.get_image(5, 1, 64, 64, scale=2),
-                sprite_loader.get_image(6, 1, 64, 64, scale=2),
-                sprite_loader.get_image(7, 1, 64, 64, scale=2),
-                sprite_loader.get_image(8, 1, 64, 64, scale=2),
-                sprite_loader.get_image(9, 1, 64, 64, scale=2),
-                sprite_loader.get_image(10, 1, 64, 64, scale=2),
-                sprite_loader.get_image(11, 1, 64, 64, scale=2),
-                sprite_loader.get_image(12, 1, 64, 64, scale=2)
+                sprite_loader.get_image(0, 1, 64, 64, scale=6),
+                sprite_loader.get_image(1, 1, 64, 64, scale=6),
+                sprite_loader.get_image(2, 1, 64, 64, scale=6),
+                sprite_loader.get_image(3, 1, 64, 64, scale=6),
+                sprite_loader.get_image(4, 1, 64, 64, scale=6),
+                sprite_loader.get_image(5, 1, 64, 64, scale=6),
+                sprite_loader.get_image(6, 1, 64, 64, scale=6),
+                sprite_loader.get_image(7, 1, 64, 64, scale=6),
+                sprite_loader.get_image(8, 1, 64, 64, scale=6),
+                sprite_loader.get_image(9, 1, 64, 64, scale=6),
+                sprite_loader.get_image(10, 1, 64, 64, scale=6),
+                sprite_loader.get_image(11, 1, 64, 64, scale=6),
+                sprite_loader.get_image(12, 1, 64, 64, scale=6)
             ]
         if self.frames[self.state]:
             self.image = self.frames[self.state][0]
