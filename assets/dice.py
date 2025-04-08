@@ -52,9 +52,10 @@ class Dice(pygame.sprite.Sprite):
         dice_front_5_surf = pygame.image.load("../assets/dice_faces/front-5.png").convert_alpha()
         dice_front_6_surf = pygame.image.load("../assets/dice_faces/front-6.png").convert_alpha()
 
-        return [dice_front_4_surf, dice_front_1_surf, dice_front_2_surf, dice_front_3_surf, dice_front_5_surf, dice_front_6_surf]
+        return [dice_front_1_surf, dice_front_2_surf, dice_front_3_surf, dice_front_4_surf, dice_front_5_surf, dice_front_6_surf]
 
     def roll_dice_start(self):
+        print("Roll started: Reset has_landed and landed_index")
         if self.start and self.rect.bottom >= self.ground_level:
             self.rect.midbottom = (self.starting_x, self.starting_y)
             self.x_offset = 0
@@ -70,7 +71,7 @@ class Dice(pygame.sprite.Sprite):
 
         elif not self.has_landed:
             self.image = random.choice(self.front_frames)
-            self.landed_index = self.front_frames.index(self.image)
+            self.landed_index = [1, 2, 3, 4, 5, 6][self.front_frames.index(self.image)]
             self.has_landed = True
 
     def apply_gravity(self):
@@ -102,7 +103,7 @@ class Dice(pygame.sprite.Sprite):
 
     def roll_value(self):
         if self.landed_index is not None:
-            if self.landed_index == 5:
-                return (self.landed_index + 1) * 2
-            return self.landed_index + 1
+            if self.landed_index == 6:
+                return self.landed_index * 2
+            return self.landed_index
         return None

@@ -187,6 +187,7 @@ class CombatEnemy(pygame.sprite.Sprite):
         else:
             self.change_state("death")
             print(f"{self.enemy_type} is defeated! Reward: {self.reward}")
+            self.is_dead = True
             return self.reward
 
     def attack(self,player,dice_roll_value):

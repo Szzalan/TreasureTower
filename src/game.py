@@ -20,6 +20,14 @@ NUM_ROOMS = 5
 class GameStates:
     EXPLORATION = "exploration"
     COMBAT = "combat"
+def return_to_exploration(screen,main_menu):
+    print("Returning to exploration mode!")
+    # Set the game state to exploration
+    current_state = GameStates.EXPLORATION
+
+    # Launch the appropriate game/exploration logic
+    game(screen,main_menu)  # If "game()" is the main loop managing exploration
+
 
 def entity_spawner(dungeon_map,enemy_types):
     """SPAWNS THE ENTITIES IN THE DUNGEON"""
@@ -294,9 +302,10 @@ def game(screen, main_menu):
                     if enemy.interact(event,player):
                         state = GameStates.COMBAT
                         current_enemy = enemy
-                        combat.combat(screen,main_menu,current_enemy.enemy_type)
-                        state = GameStates.EXPLORATION
-                        current_enemy.kill()
+                        result = combat.combat(screen,main_menu,current_enemy.enemy_type)
+                        if result == "ENEMY_DEFEATED":
+                            return_to_exploration(screen, main_menu)
+                            current_enemy.kill()
                         break
         player.animation_loop()
         draw_dungeon(screen, dungeon_surface)

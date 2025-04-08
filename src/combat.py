@@ -33,6 +33,8 @@ def combat(screen, main_menu,enemy_type):
     dice_sprites = pygame.sprite.Group(dice)
     player_attacked = False
     roll_button = Button((200, 690),"Roll")
+    victory = False
+    victory_timer = 0
 
     while running:
         for event in pygame.event.get():
@@ -61,6 +63,13 @@ def combat(screen, main_menu,enemy_type):
             if player.current_health <= 0:
                 player.change_state("death")
                 print("Game Over!")
+                main_menu()
+                running = False
+
+        elif enemy.is_dead:
+            print(f"The {enemy_type} has been defeated! You win!")
+            return "ENEMY_DEFEATED"
+
         health_bar_player.hp = player.current_health
         health_bar_enemy.hp = enemy.current_health
 
