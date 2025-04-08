@@ -18,7 +18,6 @@ def main_menu():
     title = pygame.font.Font("../assets/Pixeltype.ttf", 100).render("Treasure Tower", False, (255, 255, 255))
     quit_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 180), "Quit")
     info_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120), "How to play")
-    button_sfx = pygame.mixer.Sound("../assets/placeholder.mp3")
     play_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 60), "Play")
     bg = pygame.image.load("../assets/background/fallen_kingdom_1280x720.png").convert()
 

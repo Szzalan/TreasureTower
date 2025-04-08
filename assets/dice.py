@@ -8,6 +8,7 @@ class Dice(pygame.sprite.Sprite):
         self.starting_x = x
         self.starting_y = y
         self.image = pygame.image.load("../assets/dice_faces/front-6.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (self.image.get_width() * 2, self.image.get_height() * 2))
         self.rect = self.image.get_rect(midbottom=(x, y))
         self.gravity = 0
         self.jumped = False
@@ -16,13 +17,17 @@ class Dice(pygame.sprite.Sprite):
         self.start = True
         self.x_offset = 0
         self.jump_strength = 20
-        self.angled_frames = self.angled_dice()
-        self.front_frames = self.front_dice()
+        self.angled_frames = self.scale_frames(self.angled_dice(),2)
+        self.front_frames = self.scale_frames(self.front_dice(), 2)
         self.current_frame_index = 0
         self.frame_counter = 0
         self.ground_level = y
         self.landed_index = None
 
+    @staticmethod
+    def scale_frames(frames, scale_factor):
+        return [pygame.transform.scale(frame, (frame.get_width() * scale_factor,frame.get_height() * scale_factor))
+                for frame in frames]
     @staticmethod
     def angled_dice():
         dice_angled_1_surf = pygame.image.load("../assets/dice_faces/angled-left&right-1.png").convert_alpha()
