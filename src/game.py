@@ -36,18 +36,19 @@ def load_dungeon(saved_dungeon_map, enemy_metadata):
     if saved_dungeon_map is None:
         raise ValueError("No saved dungeon map found.")
     enemy_group = pygame.sprite.Group()
-    already_spawned = []
+    player_spawn = None
     for enemy_data in enemy_metadata['enemies']:
         spawn_x = enemy_data['x']
         spawn_y = enemy_data['y']
         enemy_type = enemy_data['type']
         killed = enemy_data['killed']
+        spawned = enemy_data['spawned']
         if not killed:
             enemy = Enemy(spawn_y, spawn_x, enemy_type)
             enemy_group.add(enemy)
-        elif killed and (spawn_x, spawn_y) not in already_spawned:
-            already_spawned.append((spawn_x, spawn_y))
+        elif killed and not spawned:
             player_spawn = (spawn_x,spawn_y)
+            enemy_data['spawned'] = True
     floor_list, wall_list, _ = sort_tile_types(saved_dungeon_map)
     entity_pos = copy.deepcopy(enemy_metadata)
     return player_spawn,enemy_group,entity_pos
@@ -76,7 +77,7 @@ def entity_spawner(dungeon_map,enemy_types):
         enemy = Enemy(spawn_y,spawn_x,enemy_type)
         enemy_group.add(enemy)
         floor_list.remove((spawn_x,spawn_y))
-        entity_positions['enemies'].append({'x': spawn_x, 'y': spawn_y, 'type': enemy_type, 'killed': False})
+        entity_positions['enemies'].append({'x': spawn_x, 'y': spawn_y, 'type': enemy_type, 'killed': False, 'spawned': False})
 
     return player_spawn, enemy_group, entity_positions
 
