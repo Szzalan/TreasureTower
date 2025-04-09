@@ -19,6 +19,7 @@ class CombatPlayer(pygame.sprite.Sprite):
         self.rect = pygame.Rect(x,y,100,100)
         self.load_sprite_sheet()
         self.load_frames()
+        self.gold = 0
 
     def load_sprite_sheet(self):
         if self.state == "idle":

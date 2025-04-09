@@ -6,12 +6,12 @@ from assets.dice import Dice
 from assets.combat_enemy import CombatEnemy
 from assets.combat_player import CombatPlayer
 from assets.healthbar import HealthBar
+from assets.playerstate import PlayerState
 
 pygame.init()
 clock = pygame.time.Clock()
 
-
-def combat(screen, main_menu,enemy_type):
+def combat(screen, main_menu,enemy_type,player_state):
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     running = True
     enemy_placements = {
@@ -21,9 +21,9 @@ def combat(screen, main_menu,enemy_type):
     }
     placement_x,placement_y = enemy_placements.get(enemy_type)
     enemy = CombatEnemy(placement_x,placement_y,enemy_type)
-    player = CombatPlayer(screen.get_width() / 2 - 250,150,150,10)
+    player = CombatPlayer(screen.get_width() / 2 - 250,150,player_state.current_health,10)
 
-    health_bar_player = HealthBar(screen.get_width() / 2 - 250, 690, 150, 10,player.max_health,player.current_health)
+    health_bar_player = HealthBar(screen.get_width() / 2 - 250, 690, 150, 10,150,player.current_health)
     health_bar_enemy = HealthBar(screen.get_width()/2 + 100,690,150,10,enemy.max_health,enemy.current_health)
     font = pygame.font.Font("../assets/Pixeltype.ttf", 20)
 
@@ -66,6 +66,8 @@ def combat(screen, main_menu,enemy_type):
 
         elif enemy.is_dead:
             print(f"The {enemy_type} has been defeated! You win!")
+            player_state.current_health = player.current_health
+            player_state.gold += enemy.reward
             return "ENEMY_DEFEATED"
 
         health_bar_player.hp = player.current_health

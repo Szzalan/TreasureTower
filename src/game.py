@@ -11,14 +11,17 @@ from assets.player import Player
 from assets.enemy import Enemy
 from assets.combat_player import CombatPlayer
 from assets.healthbar import HealthBar
+from assets.playerstate import PlayerState
 import combat
 
 pygame.init()
 clock = pygame.time.Clock()
 
+floor_number = 1
 FLOOR_WIDTH = 500
 FLOOR_HEIGHT = 500
 NUM_ROOMS = 5
+player_state = PlayerState(150,0)
 
 class GameStates:
     EXPLORATION = "exploration"
@@ -315,6 +318,10 @@ def dungeon_generator():
     return dungeon_map,rooms,player_spawn,enemy_group,entity_positions
 
 def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
+    global player_state, floor_number
+    health_bar_player = HealthBar(50, 50, 200, 15,150,player_state.current_health)
+    font = pygame.font.Font("../assets/Pixeltype.ttf", 20)
+    number_of_floors = pygame.font.Font("../assets/Pixeltype.ttf", 50).render(f"Floor: {floor_number}", False, (255, 255, 255))
     message = ""
     message_duration = 0
     Room.load_images()
@@ -330,6 +337,7 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     running = True
     while running:
+        health_bar_player.hp = player_state.current_health
         current_time = pygame.time.get_ticks()
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
@@ -349,6 +357,7 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
                     message = door_result
                     message_duration = current_time + 2000
                 elif door_result:
+                    floor_number += 1
                     message = ""
                     print("Proceeding to the next floor...")
                     dungeon_map = None  # Clear the current dungeon map
@@ -363,7 +372,7 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
                     if enemy.interact(event,player):
                         state = GameStates.COMBAT
                         current_enemy = enemy
-                        result = combat.combat(screen,main_menu,current_enemy.enemy_type)
+                        result = combat.combat(screen,main_menu,current_enemy.enemy_type,player_state)
                         if result == "ENEMY_DEFEATED":
                             for enemy_data in entity_pos['enemies']:
                                 if enemy_data['x'] == current_enemy.y and enemy_data['y'] == current_enemy.x:
@@ -380,5 +389,8 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
         screen.blit(player.current_frame, (player.x + offset_x, player.y + offset_y))
         if message and current_time <= message_duration:
             door_message(screen, message)
+        health_bar_player.draw(screen)
+        health_bar_player.health_value_display(screen, font)
+        screen.blit(number_of_floors, (screen.get_width()/2-number_of_floors.get_width()/2, screen.get_height()/2-300))
         pygame.display.flip()
         clock.tick(60)
