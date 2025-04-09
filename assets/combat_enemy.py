@@ -9,12 +9,12 @@ ENEMY_STATS = {
         "reward_range": (5,10)
     },
     "skeleton": {
-        "max_health": 100,
+        "max_health": 40,
         "damage_range": (10,15),
         "reward_range": (15,20)
     },
     "zombie": {
-        "max_health": 150,
+        "max_health": 40,
         "damage_range": (7,12),
         "reward_range": (20,25)
     }

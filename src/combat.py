@@ -33,8 +33,6 @@ def combat(screen, main_menu,enemy_type):
     dice_sprites = pygame.sprite.Group(dice)
     player_attacked = False
     roll_button = Button((200, 690),"Roll")
-    victory = False
-    victory_timer = 0
 
     while running:
         for event in pygame.event.get():

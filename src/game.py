@@ -1,3 +1,4 @@
+import copy
 import math
 
 import pygame
@@ -8,6 +9,8 @@ import random
 from assets.dice import Dice
 from assets.player import Player
 from assets.enemy import Enemy
+from assets.combat_player import CombatPlayer
+from assets.healthbar import HealthBar
 import combat
 
 pygame.init()
@@ -21,14 +24,33 @@ class GameStates:
     EXPLORATION = "exploration"
     COMBAT = "combat"
 
-def return_to_exploration(screen,main_menu):
+def return_to_exploration(screen,main_menu, saved_dungeon_map=None, enemy_metadata=None):
     print("Returning to exploration mode!")
-    # Set the game state to exploration
-    current_state = GameStates.EXPLORATION
+    if saved_dungeon_map and enemy_metadata:
+        game(screen,main_menu,saved_dungeon_map,enemy_metadata)
 
-    # Launch the appropriate game/exploration logic
-    game(screen,main_menu)  # If "game()" is the main loop managing exploration
+    else:# Launch the appropriate game/exploration logic
+        print("Error: No saved dungeon map or enemy metadata!")
 
+def load_dungeon(saved_dungeon_map, enemy_metadata):
+    if saved_dungeon_map is None:
+        raise ValueError("No saved dungeon map found.")
+    enemy_group = pygame.sprite.Group()
+    already_spawned = []
+    for enemy_data in enemy_metadata['enemies']:
+        spawn_x = enemy_data['x']
+        spawn_y = enemy_data['y']
+        enemy_type = enemy_data['type']
+        killed = enemy_data['killed']
+        if not killed:
+            enemy = Enemy(spawn_y, spawn_x, enemy_type)
+            enemy_group.add(enemy)
+        elif killed and (spawn_x, spawn_y) not in already_spawned:
+            already_spawned.append((spawn_x, spawn_y))
+            player_spawn = (spawn_x,spawn_y)
+    floor_list, wall_list, _ = sort_tile_types(saved_dungeon_map)
+    entity_pos = copy.deepcopy(enemy_metadata)
+    return player_spawn,enemy_group,entity_pos
 
 def entity_spawner(dungeon_map,enemy_types):
     """SPAWNS THE ENTITIES IN THE DUNGEON"""
@@ -54,7 +76,7 @@ def entity_spawner(dungeon_map,enemy_types):
         enemy = Enemy(spawn_y,spawn_x,enemy_type)
         enemy_group.add(enemy)
         floor_list.remove((spawn_x,spawn_y))
-        entity_positions['enemies'].append((spawn_x,spawn_y))
+        entity_positions['enemies'].append({'x': spawn_x, 'y': spawn_y, 'type': enemy_type, 'killed': False})
 
     return player_spawn, enemy_group, entity_positions
 
@@ -209,6 +231,9 @@ def rotate_walls(dungeon_map,x ,y):
         return "wall"
 
 def generate_dungeon_surface(dungeon_map):
+    if dungeon_map is None or len(dungeon_map) == 0:
+        print("Error: dungeon_map is empty or None in generate_dungeon_surface.")
+        return None
     tile_width = Room.TILE.get_width()
     tile_height = Room.TILE.get_height()
     dungeon_width = len(dungeon_map[0])
@@ -288,20 +313,20 @@ def dungeon_generator():
 
     return dungeon_map,rooms,player_spawn,enemy_group,entity_positions
 
-def game(screen, main_menu):
+def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
     message = ""
     message_duration = 0
     Room.load_images()
-    dungeon_map,rooms,player_spawn,enemy_group,entity_pos = dungeon_generator()
-    dungeon_surface = generate_dungeon_surface(dungeon_map)
-    state = GameStates.EXPLORATION
-
-    dice = Dice(screen.get_width()/2, 350)
-    all_sprites = pygame.sprite.Group(dice)
-    back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
-    roll_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 60),"Roll")
+    if dungeon_map is None:
+        dungeon_map,rooms,player_spawn,enemy_group,entity_pos = dungeon_generator()
+    else:
+        player_spawn, enemy_group, entity_pos = load_dungeon(dungeon_map,enemy_metadata)
     player_start = player_spawn
-    player = Player(player_start[1] * 16, player_start[0] * 16,16,16)
+    player = Player(player_start[1] * 16, player_start[0] * 16, 16, 16)
+    dungeon_surface = generate_dungeon_surface(dungeon_map)
+    saved_dungeon_map = copy.deepcopy(dungeon_map)
+    state = GameStates.EXPLORATION
+    back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     running = True
     while running:
         current_time = pygame.time.get_ticks()
@@ -314,10 +339,6 @@ def game(screen, main_menu):
                 if back_button.rect.collidepoint(event.pos):
                     main_menu()
                     running = False
-
-                if roll_button.rect.collidepoint(event.pos):
-                    dice.roll_dice_start()
-
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
@@ -328,6 +349,14 @@ def game(screen, main_menu):
                     message_duration = current_time + 2000
                 elif door_result:
                     message = ""
+                    print("Proceeding to the next floor...")
+                    dungeon_map = None  # Clear the current dungeon map
+                    saved_dungeon_map = None
+                    enemy_metadata = None
+                    dungeon_surface = None
+                    game(screen, main_menu)  # Restart the game function to regenerate the dungeon
+                    return  # Exit the current loop to avoid conflicting with the new game call
+
             if state == GameStates.EXPLORATION:
                 for enemy in enemy_group:
                     if enemy.interact(event,player):
@@ -335,7 +364,10 @@ def game(screen, main_menu):
                         current_enemy = enemy
                         result = combat.combat(screen,main_menu,current_enemy.enemy_type)
                         if result == "ENEMY_DEFEATED":
-                            return_to_exploration(screen, main_menu)
+                            for enemy_data in entity_pos['enemies']:
+                                if enemy_data['x'] == current_enemy.y and enemy_data['y'] == current_enemy.x:
+                                    enemy_data['killed'] = True
+                            return_to_exploration(screen, main_menu,saved_dungeon_map,entity_pos)
                             current_enemy.kill()
                         break
         player.animation_loop()
@@ -343,9 +375,6 @@ def game(screen, main_menu):
         enemy_group.update(current_time)
         for enemy in enemy_group:
             screen.blit(enemy.image, (((enemy.x * 16) + offset_x), (enemy.y * 16) + offset_y))
-        all_sprites.update()
-        all_sprites.draw(screen)
-        roll_button.draw(screen)
         back_button.draw(screen)
         screen.blit(player.current_frame, (player.x + offset_x, player.y + offset_y))
         if message and current_time <= message_duration:
