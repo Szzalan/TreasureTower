@@ -20,7 +20,7 @@ floor_number = 1
 FLOOR_WIDTH = 500
 FLOOR_HEIGHT = 500
 NUM_ROOMS = 5
-player_state = PlayerState(150,0)
+player_state = PlayerState(150,0,potion_amount=3)
 
 class GameStates:
     EXPLORATION = "exploration"
@@ -338,7 +338,7 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     running = True
     while running:
-        potions_amount = pygame.font.Font("../assets/Pixeltype.ttf", 50).render(f"{potion.amount}", False, (255, 255, 255))
+        potions_amount = pygame.font.Font("../assets/Pixeltype.ttf", 50).render(f"{player_state.potion_amount}", False, (255, 255, 255))
         potions_text_x = potion.rect.left - 50
         potions_text_y = potion.rect.centery - 10
         gold_amount = pygame.font.Font("../assets/Pixeltype.ttf", 50).render(f"{player_state.gold}", False, (255, 255, 255))
@@ -355,6 +355,10 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
                 if back_button.rect.collidepoint(event.pos):
                     main_menu()
                     running = False
+                if potion.rect.collidepoint(event.pos):
+                    if player_state.potion_amount > 0:
+                        player_state.potion_amount -= 1
+                        potion.use(player_state)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
