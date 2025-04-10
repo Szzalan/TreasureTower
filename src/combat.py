@@ -13,6 +13,8 @@ clock = pygame.time.Clock()
 
 def combat(screen, main_menu,enemy_type,player_state):
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
+    endgame_text = pygame.font.Font("../assets/Pixeltype.ttf", 100).render("GAME OVER!", False, (255, 255, 255))
+    endgame_state = False
     rolling = False
     running = True
     enemy_placements = {
@@ -73,10 +75,10 @@ def combat(screen, main_menu,enemy_type,player_state):
                     player_attacked = False
 
         elif player.state == "death":
+            endgame_state = True
             current_time = pygame.time.get_ticks()
             death_delay = 1500
             if current_time - player.death_timer >= death_delay:
-                print("Game Over!")
                 main_menu()
                 running = False
 
@@ -84,7 +86,6 @@ def combat(screen, main_menu,enemy_type,player_state):
             current_time = pygame.time.get_ticks()
             death_delay = 2500
             if current_time - enemy.death_timer >= death_delay:
-                print(f"The {enemy_type} has been defeated! You win!")
                 player_state.current_health = player.current_health
                 player_state.gold += enemy.reward
                 return "ENEMY_DEFEATED"
@@ -103,5 +104,7 @@ def combat(screen, main_menu,enemy_type,player_state):
         health_bar_enemy.health_value_display(screen,font)
         screen.blit((pygame.transform.flip(enemy.image,flip_x=1,flip_y=0)), enemy.rect.topleft)
         screen.blit(player.image, player.rect.topleft)
+        if endgame_state:
+            screen.blit(endgame_text, (screen.get_width() / 2 - endgame_text.get_width() / 2, screen.get_height() / 2 - 250))
         pygame.display.flip()
         clock.tick(60)

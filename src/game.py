@@ -6,10 +6,9 @@ import pygame
 from assets.button import Button
 import random
 
-from assets.dice import Dice
 from assets.player import Player
 from assets.enemy import Enemy
-from assets.combat_player import CombatPlayer
+from assets.items import Item
 from assets.healthbar import HealthBar
 from assets.playerstate import PlayerState
 import combat
@@ -318,6 +317,8 @@ def dungeon_generator():
     return dungeon_map,rooms,player_spawn,enemy_group,entity_positions
 
 def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
+    gold = Item(410,5,"Gold")
+    potion = Item(410,25,"Potion")
     global player_state, floor_number
     health_bar_player = HealthBar(50, 50, 200, 15,150,player_state.current_health)
     font = pygame.font.Font("../assets/Pixeltype.ttf", 20)
@@ -337,6 +338,12 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     running = True
     while running:
+        potions_amount = pygame.font.Font("../assets/Pixeltype.ttf", 50).render(f"{potion.amount}", False, (255, 255, 255))
+        potions_text_x = potion.rect.left - 50
+        potions_text_y = potion.rect.centery - 10
+        gold_amount = pygame.font.Font("../assets/Pixeltype.ttf", 50).render(f"{player_state.gold}", False, (255, 255, 255))
+        gold_text_x = gold.rect.left - 50
+        gold_text_y = gold.rect.centery - 10
         health_bar_player.hp = player_state.current_health
         current_time = pygame.time.get_ticks()
         screen.fill((0, 0, 0))
@@ -392,5 +399,9 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
         health_bar_player.draw(screen)
         health_bar_player.health_value_display(screen, font)
         screen.blit(number_of_floors, (screen.get_width()/2-number_of_floors.get_width()/2, screen.get_height()/2-300))
+        screen.blit(gold.image,gold.rect.topleft)
+        screen.blit(potions_amount, (potions_text_x, potions_text_y))
+        screen.blit(gold_amount, (gold_text_x, gold_text_y))
+        screen.blit(potion.image,potion.rect.topleft)
         pygame.display.flip()
         clock.tick(60)

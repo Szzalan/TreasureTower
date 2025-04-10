@@ -2,7 +2,7 @@ import math
 
 import pygame
 from assets.button import Button
-from assets.combat_enemy import CombatEnemy
+from assets.items import Item
 pygame.init()
 clock = pygame.time.Clock()
 

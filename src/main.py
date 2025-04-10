@@ -4,7 +4,6 @@ import pygame
 from assets.button import Button
 import math
 from assets.playerstate import PlayerState
-
 from src.how_to_play import how_to_play
 from src.game import game
 
