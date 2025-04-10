@@ -63,16 +63,21 @@ class Dice(pygame.sprite.Sprite):
             self.jumped = True
             self.bounced = False
             self.start = False
+            self.has_landed = False
+            self.landed_index = None
 
     def roll_animation(self):
         if self.rect.bottom < self.ground_level and self.frame_counter % 2 == 0:
             self.current_frame_index = (self.current_frame_index + 1) % len(self.angled_frames)
             self.image = self.angled_frames[self.current_frame_index]
 
-        elif not self.has_landed:
-            self.image = random.choice(self.front_frames)
-            self.landed_index = [1, 2, 3, 4, 5, 6][self.front_frames.index(self.image)]
-            self.has_landed = True
+        elif self.bounced or self.jumped:
+            if self.frame_counter % 5 == 0:
+                 self.image = random.choice(self.front_frames)
+        elif self.has_landed:
+            if self.landed_index is None:
+                self.landed_index = random.randint(1, 6)
+            self.image = self.front_frames[self.landed_index - 1]
 
     def apply_gravity(self):
         if self.jumped or self.bounced:
@@ -95,14 +100,16 @@ class Dice(pygame.sprite.Sprite):
                 self.bounced = False
                 self.x_offset = 0
                 self.start = True
+                self.has_landed = True
 
     def update(self):
         self.frame_counter += 1
-        self.roll_animation()
         self.apply_gravity()
+        self.roll_animation()
+
 
     def roll_value(self):
-        if self.landed_index is not None:
+        if self.has_landed and self.landed_index is not None:
             if self.landed_index == 6:
                 return self.landed_index * 2
             return self.landed_index

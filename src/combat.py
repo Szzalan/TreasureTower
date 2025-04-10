@@ -13,6 +13,7 @@ clock = pygame.time.Clock()
 
 def combat(screen, main_menu,enemy_type,player_state):
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
+    rolling = False
     running = True
     enemy_placements = {
         "skeleton" : [620,370],
@@ -46,14 +47,20 @@ def combat(screen, main_menu,enemy_type,player_state):
 
                 if roll_button.rect.collidepoint(event.pos):
                     dice.roll_dice_start()
-                    if dice.has_landed:
-                        dice_roll_value = dice.roll_value()
-                        player.attack(enemy,dice_roll_value)
-                        player_attacked = True
+                    rolling = True
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+
+        if rolling and dice.has_landed:
+            dice_roll_value = dice.roll_value()
+            print(f"Dice has landed on {dice_roll_value}")
+            if dice_roll_value is not None:
+                print(f"Player rolled a {dice_roll_value}")
+                player.attack(enemy,dice_roll_value)
+                player_attacked = True
+            rolling = False
 
         if not enemy.is_dead and player_attacked:
             enemy.attack(player,dice.roll_value())
