@@ -17,9 +17,11 @@ class CombatPlayer(pygame.sprite.Sprite):
         self.frame_delay = frame_delay
         self.state = "idle"
         self.rect = pygame.Rect(x,y,100,100)
+        self.animation_finished = False
+        self.next_state = None
+        self.death_timer = 0
         self.load_sprite_sheet()
         self.load_frames()
-        self.gold = 0
 
     def load_sprite_sheet(self):
         if self.state == "idle":
@@ -64,19 +66,39 @@ class CombatPlayer(pygame.sprite.Sprite):
 
 
     def change_state(self,new_state):
-        if new_state != self.state:
+        print(f"PLAYER:Changing state from {self.state} to {new_state}")
+        if self.state == "death":
+            return
+        if self.animation_finished or new_state == "attack":
+            print(f"PLAYER:State changed to {new_state}")
             self.state = new_state
             self.load_sprite_sheet()
             self.load_frames()
             self.frame_index = 0
             self.frame_timer = pygame.time.get_ticks()
+            self.animation_finished = new_state != "idle"
+            self.next_state = "idle" if new_state != "idle" else None
+        else:
+            print(f"PLAYER:Queued {new_state} to play after {self.state} finishes")
+            self.next_state = new_state
 
     def animate(self):
         current_time = pygame.time.get_ticks()
         if current_time - self.frame_timer > self.frame_delay:
-            self.frame_index = (self.frame_index + 1) % len(self.frames[self.state])
-            self.image = self.frames[self.state][self.frame_index]
+            self.frame_index += 1
             self.frame_timer = current_time
+            if self.frame_index >= len(self.frames[self.state]):
+                if self.state == "idle":
+                    self.frame_index = 0
+                else:
+                    self.frame_index = len(self.frames[self.state]) - 1
+                    self.animation_finished = True
+
+                if self.next_state:
+                    self.change_state(self.next_state)
+                    self.next_state = None
+
+            self.image = self.frames[self.state][self.frame_index]
 
     def update(self):
         if self.state in self.frames:
@@ -88,16 +110,17 @@ class CombatPlayer(pygame.sprite.Sprite):
         self.current_health -= damage
         print(f"Player takes {damage} damage! Current health: {self.current_health}")
         if self.current_health > 0:
-            self.change_state("hurt")
+            if self.state == "idle" or self.animation_finished:
+                self.change_state("hurt")
         else:
             self.change_state("death")
+            self.death_timer = pygame.time.get_ticks()
             print("Player has died!")
 
     def attack(self,enemy,dice_roll_value):
-        if self.state in ["attack","death"]:
-            return
-        self.change_state("attack")
         attack_damage = self.damage + dice_roll_value
         print(f"Dice roll value {dice_roll_value}, damage {self.damage}")
-        print(f"Player attacks for {attack_damage} damage!")
-        enemy.take_damage(attack_damage)
+        if self.state == "idle" or self.animation_finished:
+            self.change_state("attack")
+            print(f"Player attacks for {attack_damage} damage!")
+            enemy.take_damage(attack_damage)

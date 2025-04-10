@@ -52,6 +52,8 @@ def combat(screen, main_menu,enemy_type,player_state):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+        enemy.update()
+        player.update()
 
         if rolling and dice.has_landed:
             dice_roll_value = dice.roll_value()
@@ -63,19 +65,29 @@ def combat(screen, main_menu,enemy_type,player_state):
             rolling = False
 
         if not enemy.is_dead and player_attacked:
-            enemy.attack(player,dice.roll_value())
-            player_attacked = False
-            if player.current_health <= 0:
-                player.change_state("death")
+            if player.animation_finished and enemy.animation_finished:
+                current_time = pygame.time.get_ticks()
+                attack_delay = 1000 if enemy.enemy_type == "zombie" else 500
+                if current_time - enemy.attack_timer >= attack_delay:
+                    enemy.attack(player,dice.roll_value())
+                    player_attacked = False
+
+        elif player.state == "death":
+            current_time = pygame.time.get_ticks()
+            death_delay = 1500
+            if current_time - player.death_timer >= death_delay:
                 print("Game Over!")
                 main_menu()
                 running = False
 
         elif enemy.is_dead:
-            print(f"The {enemy_type} has been defeated! You win!")
-            player_state.current_health = player.current_health
-            player_state.gold += enemy.reward
-            return "ENEMY_DEFEATED"
+            current_time = pygame.time.get_ticks()
+            death_delay = 2500
+            if current_time - enemy.death_timer >= death_delay:
+                print(f"The {enemy_type} has been defeated! You win!")
+                player_state.current_health = player.current_health
+                player_state.gold += enemy.reward
+                return "ENEMY_DEFEATED"
 
         health_bar_player.hp = player.current_health
         health_bar_enemy.hp = enemy.current_health
@@ -85,8 +97,6 @@ def combat(screen, main_menu,enemy_type,player_state):
         dice_sprites.update()
         dice_sprites.draw(screen)
         roll_button.draw(screen)
-        enemy.update()
-        player.update()
         health_bar_player.draw(screen)
         health_bar_player.health_value_display(screen,font)
         health_bar_enemy.draw(screen)

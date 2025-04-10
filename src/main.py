@@ -3,6 +3,7 @@ import sys
 import pygame
 from assets.button import Button
 import math
+from assets.playerstate import PlayerState
 
 from src.how_to_play import how_to_play
 from src.game import game
@@ -13,7 +14,7 @@ screen = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption('Treasure Tower')
 
 def main_menu():
-
+    player_state = PlayerState(150,0)
     clock = pygame.time.Clock()
     title = pygame.font.Font("../assets/Pixeltype.ttf", 100).render("Treasure Tower", False, (255, 255, 255))
     quit_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 180), "Quit")
