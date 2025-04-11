@@ -15,7 +15,7 @@ pygame.display.set_caption('Treasure Tower')
 def main_menu():
     player_state = PlayerState(150,0)
     clock = pygame.time.Clock()
-    title = pygame.font.Font("../assets/Pixeltype.ttf", 100).render("Treasure Tower", False, (255, 255, 255))
+    title = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 100).render("Treasure Tower", False, (255, 255, 255))
     quit_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 180), "Quit")
     info_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120), "How to play")
     play_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 60), "Play")

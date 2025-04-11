@@ -13,14 +13,19 @@ clock = pygame.time.Clock()
 
 def combat(screen, main_menu,enemy_type,player_state):
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
-    endgame_text = pygame.font.Font("../assets/Pixeltype.ttf", 100).render("GAME OVER!", False, (255, 255, 255))
+    endgame_text = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 100).render("GAME OVER!", False, (255, 255, 255))
+    victory_text = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 100).render("YOU WIN!", False, (255, 255, 255))
+
     endgame_state = False
+    victory = False
     rolling = False
     running = True
+
     enemy_placements = {
         "skeleton" : [620,370],
         "zombie" : [640,410],
-        "slime" : [700,500]
+        "slime" : [700,500],
+        "boss": [620,370]
     }
     placement_x,placement_y = enemy_placements.get(enemy_type)
     enemy = CombatEnemy(placement_x,placement_y,enemy_type)
@@ -28,7 +33,7 @@ def combat(screen, main_menu,enemy_type,player_state):
 
     health_bar_player = HealthBar(screen.get_width() / 2 - 250, 690, 150, 10,150,player.current_health)
     health_bar_enemy = HealthBar(screen.get_width()/2 + 100,690,150,10,enemy.max_health,enemy.current_health)
-    font = pygame.font.Font("../assets/Pixeltype.ttf", 20)
+    font = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 20)
 
     bg = pygame.image.load("../assets/combat_elements/Old_dungeon/OldDungeon320X180.png").convert()
     bg = pygame.transform.scale(bg, (screen.get_width(), screen.get_height()))
@@ -82,6 +87,14 @@ def combat(screen, main_menu,enemy_type,player_state):
                 main_menu()
                 running = False
 
+        elif enemy.is_dead and enemy_type == "boss":
+            victory = True
+            current_time = pygame.time.get_ticks()
+            death_delay = 2500
+            if current_time - enemy.death_timer >= death_delay:
+                main_menu()
+                running = False
+
         elif enemy.is_dead:
             current_time = pygame.time.get_ticks()
             death_delay = 2500
@@ -104,6 +117,8 @@ def combat(screen, main_menu,enemy_type,player_state):
         health_bar_enemy.health_value_display(screen,font)
         screen.blit((pygame.transform.flip(enemy.image,flip_x=1,flip_y=0)), enemy.rect.topleft)
         screen.blit(player.image, player.rect.topleft)
+        if victory:
+            screen.blit(victory_text, (screen.get_width() / 2 - endgame_text.get_width() / 2, screen.get_height() / 2 - 250))
         if endgame_state:
             screen.blit(endgame_text, (screen.get_width() / 2 - endgame_text.get_width() / 2, screen.get_height() / 2 - 250))
         pygame.display.flip()

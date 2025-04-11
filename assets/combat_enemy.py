@@ -4,18 +4,23 @@ import random
 from assets.spritesheet import HandleSpriteSheet
 ENEMY_STATS = {
     "slime": {
-        "max_health": 50,
+        "max_health": 30,
         "damage_range": (3,7),
-        "reward_range": (5,10)
+        "reward_range": (10,15)
     },
     "skeleton": {
-        "max_health": 40,
-        "damage_range": (10,15),
+        "max_health": 45,
+        "damage_range": (10,14),
         "reward_range": (15,20)
     },
     "zombie": {
-        "max_health": 40,
+        "max_health": 60,
         "damage_range": (7,12),
+        "reward_range": (20,25)
+    },
+    "boss":{
+        "max_health": 80,
+        "damage_range": (12,16),
         "reward_range": (20,25)
     }
 }
@@ -49,8 +54,8 @@ class CombatEnemy(pygame.sprite.Sprite):
 
     def load_sprite_sheet(self):
         if self.enemy_type == "slime":
-            self.sprite_sheet = pygame.image.load("../assets/slime_sprite_sheet.png").convert_alpha()
-        if self.enemy_type == "skeleton":
+            self.sprite_sheet = pygame.image.load("../assets/map_entities/slime_sprite_sheet.png").convert_alpha()
+        if self.enemy_type == "skeleton" or self.enemy_type == "boss":
             self.sprite_sheet = pygame.image.load("../assets/combat_elements/skeleton/Skeleton_enemy.png").convert_alpha()
         if self.enemy_type == "zombie":
             self.sprite_sheet = pygame.image.load("../assets/combat_elements/Zombie.png").convert_alpha()
@@ -115,7 +120,7 @@ class CombatEnemy(pygame.sprite.Sprite):
                 sprite_loader.get_image(6, 5, 32, 32, scale=8),
                 sprite_loader.get_image(7, 5, 32, 32, scale=8)
             ]
-        if self.enemy_type == "skeleton":
+        if self.enemy_type == "skeleton" or self.enemy_type == "boss":
             self.frames["idle"] = [
                 sprite_loader.get_image(0, 3, 64, 64, scale=6),
                 sprite_loader.get_image(1, 3, 64, 64, scale=6),
@@ -204,8 +209,12 @@ class CombatEnemy(pygame.sprite.Sprite):
             self.change_state("death")
 
     def take_damage(self,damage):
-        self.current_health -= damage
-        print(f"{self.enemy_type} takes {damage} damage! Current health: {self.current_health}")
+        if self.enemy_type == "boss":
+            self.current_health -= damage // 2
+            print(f"{self.enemy_type} takes {damage // 2} damage! Current health: {self.current_health}")
+        else:
+            self.current_health -= damage
+            print(f"{self.enemy_type} takes {damage} damage! Current health: {self.current_health}")
         if self.current_health > 0:
             if self.state == "idle" or self.animation_finished:
                 self.change_state("hurt")

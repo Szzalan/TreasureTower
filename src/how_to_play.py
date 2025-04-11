@@ -2,26 +2,24 @@ import math
 
 import pygame
 from assets.button import Button
-from assets.items import Item
 pygame.init()
 clock = pygame.time.Clock()
 
 
 def how_to_play(screen, main_menu):
     text = "Your goal is to collect the treasure on top of the tower."
-    text2 = "You can move using the W, A, S and D keys."
+    text2 = "You can move using the W, A, S and D keys and interact with entities using the E key."
     text3 = "To claim the final treasure,you need to reach the end of the tower and kill the boss."
     text4 = "To overcome all of this you will use a magic dice_faces to defeat your enemies."
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
-    informations = pygame.font.Font("../assets/Pixeltype.ttf", 30).render(text,False, (255, 255, 255))
-    informations2 = pygame.font.Font("../assets/Pixeltype.ttf", 30).render(text2, False, (255, 255, 255))
-    informations3 = pygame.font.Font("../assets/Pixeltype.ttf", 30).render(text3, False, (255, 255, 255))
-    informations4 = pygame.font.Font("../assets/Pixeltype.ttf", 30).render(text4, False, (255, 255, 255))
+    informations = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 30).render(text, False, (255, 255, 255))
+    informations2 = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 30).render(text2, False, (255, 255, 255))
+    informations3 = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 30).render(text3, False, (255, 255, 255))
+    informations4 = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 30).render(text4, False, (255, 255, 255))
     running = True
     bg = pygame.image.load("../assets/background/fallen_kingdom_1280x720.png").convert()
     scroll = 0
     tiles = math.ceil(screen.get_width() / bg.get_width()) + 1
-
     while running:
         for event in pygame.event.get():
 

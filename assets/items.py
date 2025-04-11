@@ -18,7 +18,7 @@ class Item(pygame.sprite.Sprite):
         self.load_items()
 
     def load_sprite_sheet(self):
-        self.sprite_sheet = pygame.image.load("../assets/roguelikeitems.png").convert_alpha()
+        self.sprite_sheet = pygame.image.load("../assets/map_entities/roguelikeitems.png").convert_alpha()
 
     def load_items(self):
         sprite_loader = spritesheet.HandleSpriteSheet(self.sprite_sheet)

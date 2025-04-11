@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
         self.y = y
         self.width = width
         self.height = height
-        self.image = pygame.image.load("../assets/player_sheet.png")
+        self.image = pygame.image.load("../assets/map_entities/player_sheet.png")
         self.current_frame = None
         self.frame_index = 0
         self.facing = "front"

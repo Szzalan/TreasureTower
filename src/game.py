@@ -1,5 +1,4 @@
 import copy
-import math
 
 import pygame
 
@@ -17,11 +16,11 @@ import combat
 pygame.init()
 clock = pygame.time.Clock()
 
-floor_number = 1
+floor_number = 10
 FLOOR_WIDTH = 500
 FLOOR_HEIGHT = 500
 NUM_ROOMS = 5
-player_state = PlayerState(150,150,potion_amount=3)
+player_state = PlayerState(150,50,potion_amount=3)
 
 class GameStates:
     EXPLORATION = "exploration"
@@ -75,21 +74,26 @@ def entity_spawner(dungeon_map,enemy_types):
     merchant_spawn = random.choice(floor_list)
     entity_positions['merchant'] = merchant_spawn
     floor_list.remove(merchant_spawn)
-
-    for _ in range(NUM_ROOMS):
-
+    if floor_number == 10:
         spawn_x, spawn_y = random.choice(floor_list)
-        enemy_type = random.choice(enemy_types)
-        enemy = Enemy(spawn_y,spawn_x,enemy_type)
+        enemy = Enemy(spawn_y,spawn_x,"boss")
         enemy_group.add(enemy)
         floor_list.remove((spawn_x,spawn_y))
-        entity_positions['enemies'].append({'x': spawn_x, 'y': spawn_y, 'type': enemy_type, 'killed': False, 'spawned': False})
+        entity_positions['enemies'].append({'x': spawn_x, 'y': spawn_y, 'type': "boss", 'killed': False, 'spawned': False})
+    else:
+        for _ in range(NUM_ROOMS):
+            spawn_x, spawn_y = random.choice(floor_list)
+            enemy_type = random.choice(enemy_types)
+            enemy = Enemy(spawn_y,spawn_x,enemy_type)
+            enemy_group.add(enemy)
+            floor_list.remove((spawn_x,spawn_y))
+            entity_positions['enemies'].append({'x': spawn_x, 'y': spawn_y, 'type': enemy_type, 'killed': False, 'spawned': False})
 
     return player_spawn, enemy_group, entity_positions
 
 def door_message(screen,message):
     if message:
-        font = pygame.font.Font("../assets/Pixeltype.ttf",36)
+        font = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 36)
         text_surf = font.render(message,False,(255,255,255))
         text_rect = text_surf.get_rect(center=(screen.get_width()/2,650))
         screen.blit(text_surf,text_rect)
@@ -108,7 +112,6 @@ def door_interact(door_spawn,player_pos,event,enemy_group):
             else:
                 return True
         return False
-
 
 def sort_tile_types(dungeon_map):
     floor_list = []
@@ -144,8 +147,8 @@ class Room:
     def load_images(cls):
         cls.TILE = pygame.image.load("../assets/map_assets/dongeonWallFloorTransparent1.png").convert_alpha()
         cls.WALL = pygame.image.load("../assets/map_assets/dongeonWallFloorTransparent10.png").convert_alpha()
-        cls.TRAPDOOR = pygame.image.load("../assets/trapdoor.png").convert_alpha()
-        cls.DOOR = pygame.image.load("../assets/door.png").convert_alpha()
+        cls.TRAPDOOR = pygame.image.load("../assets/map_entities/trapdoor.png").convert_alpha()
+        cls.DOOR = pygame.image.load("../assets/map_entities/door.png").convert_alpha()
 
     def center(self):
         center_x = self.x + self.width // 2
@@ -326,8 +329,8 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
     lucky_die = Item(410,45,"Lucky_die")
     global player_state, floor_number
     health_bar_player = HealthBar(50, 50, 200, 15,150,player_state.current_health)
-    font = pygame.font.Font("../assets/Pixeltype.ttf", 20)
-    number_of_floors = pygame.font.Font("../assets/Pixeltype.ttf", 50).render(f"Floor: {floor_number}", False, (255, 255, 255))
+    font = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 20)
+    number_of_floors = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 50).render(f"Floor: {floor_number}", False, (255, 255, 255))
     message = ""
     message_duration = 0
     Room.load_images()
@@ -345,13 +348,13 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     running = True
     while running:
-        potions_amount = pygame.font.Font("../assets/Pixeltype.ttf", 50).render(f"{player_state.potion_amount}", False, (255, 255, 255))
+        potions_amount = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 50).render(f"{player_state.potion_amount}", False, (255, 255, 255))
         potions_text_x = potion.rect.left - 50
         potions_text_y = potion.rect.centery - 10
-        gold_amount = pygame.font.Font("../assets/Pixeltype.ttf", 50).render(f"{player_state.gold}", False, (255, 255, 255))
+        gold_amount = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 50).render(f"{player_state.gold}", False, (255, 255, 255))
         gold_text_x = gold.rect.left - 50
         gold_text_y = gold.rect.centery - 10
-        lucky_die_amount = pygame.font.Font("../assets/Pixeltype.ttf", 50).render(f"{player_state.lucky_die_amount}", False, (255, 255, 255))
+        lucky_die_amount = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 50).render(f"{player_state.lucky_die_amount}", False, (255, 255, 255))
         lucky_die_x = lucky_die.rect.left - 50
         lucky_die_y = lucky_die.rect.centery - 10
         health_bar_player.hp = player_state.current_health

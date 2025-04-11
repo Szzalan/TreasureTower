@@ -21,11 +21,13 @@ class Enemy(pygame.sprite.Sprite):
 
     def load_sprite_sheet(self):
         if self.enemy_type == "slime":
-            self.sprite_sheet = pygame.image.load("../assets/slime_sprite_sheet.png").convert_alpha()
+            self.sprite_sheet = pygame.image.load("../assets/map_entities/slime_sprite_sheet.png").convert_alpha()
         elif self.enemy_type == "skeleton":
-            self.sprite_sheet = pygame.image.load("../assets/undead_sprites.png").convert_alpha()
+            self.sprite_sheet = pygame.image.load("../assets/map_entities/undead_sprites.png").convert_alpha()
         elif self.enemy_type == "zombie":
-            self.sprite_sheet = pygame.image.load("../assets/undead_sprites.png").convert_alpha()
+            self.sprite_sheet = pygame.image.load("../assets/map_entities/undead_sprites.png").convert_alpha()
+        elif self.enemy_type == "boss":
+            self.sprite_sheet = pygame.image.load("../assets/map_entities/boss_summon_circle.png").convert_alpha()
 
 
     def load_frames(self):
@@ -49,6 +51,10 @@ class Enemy(pygame.sprite.Sprite):
                 sprite_loader.get_image(2, 2, 16, 16, offset_h=10),
                 sprite_loader.get_image(3, 2, 16, 16, offset_h=10)
 
+            ]
+        elif self.enemy_type == "boss":
+            self.frames["idle"] = [
+                sprite_loader.get_image(0, 0, 16, 16)
             ]
         self.image = self.frames["idle"][0]
 

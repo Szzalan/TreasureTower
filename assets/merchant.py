@@ -65,7 +65,7 @@ class Merchant(pygame.sprite.Sprite):
         self.load_img()
 
     def load_sprite_sheet(self):
-        self.sprite_sheet = pygame.image.load("../assets/NPCS V1/NPCS.png").convert_alpha()
+        self.sprite_sheet = pygame.image.load("../assets/map_entities/NPCS.png").convert_alpha()
 
     def load_img(self):
         sprite_loader = spritesheet.HandleSpriteSheet(self.sprite_sheet)
@@ -90,7 +90,7 @@ class Merchant(pygame.sprite.Sprite):
                 potion = Item(0,0,"Potion")
                 lucky_die = Item(0,0,"Lucky_die")
                 items = [potion,lucky_die]
-                font = pygame.font.Font("../assets/Pixeltype.ttf",32)
+                font = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 32)
                 screen = pygame.display.get_surface()
                 screen_height = pygame.display.get_surface().get_height()
                 screen_width = pygame.display.get_surface().get_width()

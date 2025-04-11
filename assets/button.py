@@ -2,8 +2,8 @@ import pygame
 
 class Button:
     pygame.init()
-    def __init__(self, pos, text_input, font=pygame.font.Font("../assets/Pixeltype.ttf",50),
-                 base_color=(169,169,169),rect_color=(0,0,0),rect_size=None,hover_color=(112,128,144)):
+    def __init__(self, pos, text_input, font=pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 50),
+                 base_color=(169,169,169), rect_color=(0,0,0), rect_size=None, hover_color=(112,128,144)):
         self.x_pos = pos[0]
         self.y_pos = pos[1]
         self.font = font

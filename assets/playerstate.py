@@ -1,5 +1,5 @@
 class PlayerState:
-    def __init__(self,current_health,gold,max_health=150, potion_amount=0, lucky_die_amount = 0):
+    def __init__(self,current_health,gold,max_health=150, potion_amount = 0, lucky_die_amount = 1):
         self.max_health = max_health
         self.current_health = current_health
         self.gold = gold
