@@ -16,7 +16,7 @@ import combat
 pygame.init()
 clock = pygame.time.Clock()
 
-floor_number = 10
+floor_number = 1
 FLOOR_WIDTH = 500
 FLOOR_HEIGHT = 500
 NUM_ROOMS = 5
@@ -345,7 +345,6 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
     saved_dungeon_map = copy.deepcopy(dungeon_map)
     state = GameStates.EXPLORATION
     dungeon_map[merchant.y][merchant.x] = "MERCHANT"
-    back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     running = True
     while running:
         potions_amount = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 50).render(f"{player_state.potion_amount}", False, (255, 255, 255))
@@ -367,9 +366,6 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
                 merchant.interact(event,player,player_state)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if back_button.rect.collidepoint(event.pos):
-                    main_menu()
-                    running = False
                 if potion.rect.collidepoint(event.pos):
                     if player_state.potion_amount > 0:
                         player_state.potion_amount -= 1
@@ -411,7 +407,6 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
         enemy_group.update(current_time)
         for enemy in enemy_group:
             screen.blit(enemy.image, (((enemy.x * 16) + offset_x), (enemy.y * 16) + offset_y))
-        back_button.draw(screen)
         screen.blit(player.current_frame, (player.x + offset_x, player.y + offset_y))
         screen.blit(merchant.image,((merchant.x * 16) + offset_x,(merchant.y * 16) + offset_y))
         if message and current_time <= message_duration:

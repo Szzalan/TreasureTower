@@ -12,7 +12,6 @@ pygame.init()
 clock = pygame.time.Clock()
 
 def combat(screen, main_menu,enemy_type,player_state):
-    back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     endgame_text = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 100).render("GAME OVER!", False, (255, 255, 255))
     victory_text = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 100).render("YOU WIN!", False, (255, 255, 255))
 
@@ -48,17 +47,10 @@ def combat(screen, main_menu,enemy_type,player_state):
                 running = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if back_button.rect.collidepoint(event.pos):
-                    main_menu()
-                    running = False
-
                 if roll_button.rect.collidepoint(event.pos):
                     dice.roll_dice_start()
                     rolling = True
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
         enemy.update()
         player.update()
 
@@ -107,7 +99,6 @@ def combat(screen, main_menu,enemy_type,player_state):
         health_bar_enemy.hp = enemy.current_health
 
         screen.blit(bg, (0, 0))
-        back_button.draw(screen)
         dice_sprites.update()
         dice_sprites.draw(screen)
         roll_button.draw(screen)
