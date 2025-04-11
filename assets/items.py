@@ -1,5 +1,4 @@
 import pygame
-from pygame.transform import scale
 
 import assets.spritesheet as spritesheet
 pygame.init()
@@ -25,7 +24,7 @@ class Item(pygame.sprite.Sprite):
         sprite_loader = spritesheet.HandleSpriteSheet(self.sprite_sheet)
         if self.name == "Lucky_die":
             self.image = sprite_loader.get_image(12, 11, 16, 16,scale=self.scale)
-            self.rect = self.image.get_rect(topleft=(self.x*scale,self.y*scale))
+            self.rect = self.image.get_rect(topleft=(self.x*self.scale,self.y*self.scale))
             self.cost = 100
 
         if self.name == "Potion":

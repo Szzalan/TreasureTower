@@ -11,6 +11,7 @@ from assets.enemy import Enemy
 from assets.items import Item
 from assets.healthbar import HealthBar
 from assets.playerstate import PlayerState
+from assets.merchant import Merchant
 import combat
 
 pygame.init()
@@ -58,7 +59,7 @@ def load_dungeon(saved_dungeon_map, enemy_metadata):
 def entity_spawner(dungeon_map,enemy_types):
     """SPAWNS THE ENTITIES IN THE DUNGEON"""
     enemy_group = pygame.sprite.Group()
-    entity_positions = {'trapdoor' : None, 'door' : None, 'enemies': []}
+    entity_positions = {'trapdoor' : None, 'door' : None, 'enemies': [], 'merchant': None}
     floor_list, wall_list, _ = sort_tile_types(dungeon_map)
 
     player_spawn = random.choice(floor_list)
@@ -71,6 +72,9 @@ def entity_spawner(dungeon_map,enemy_types):
 
     entity_positions['door'] = door_spawn
     floor_list.remove(player_spawn)
+    merchant_spawn = random.choice(floor_list)
+    entity_positions['merchant'] = merchant_spawn
+    floor_list.remove(merchant_spawn)
 
     for _ in range(NUM_ROOMS):
 
@@ -319,6 +323,7 @@ def dungeon_generator():
 def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
     gold = Item(410,5,"Gold")
     potion = Item(410,25,"Potion")
+    lucky_die = Item(0,0,"Lucky_die")
     global player_state, floor_number
     health_bar_player = HealthBar(50, 50, 200, 15,150,player_state.current_health)
     font = pygame.font.Font("../assets/Pixeltype.ttf", 20)
@@ -331,10 +336,12 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
     else:
         player_spawn, enemy_group, entity_pos = load_dungeon(dungeon_map,enemy_metadata)
     player_start = player_spawn
+    merchant = Merchant(entity_pos['merchant'][1],entity_pos['merchant'][0])
     player = Player(player_start[1] * 16, player_start[0] * 16, 16, 16)
     dungeon_surface = generate_dungeon_surface(dungeon_map)
     saved_dungeon_map = copy.deepcopy(dungeon_map)
     state = GameStates.EXPLORATION
+    dungeon_map[merchant.y][merchant.x] = "MERCHANT"
     back_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 120),"Back")
     running = True
     while running:
@@ -398,6 +405,7 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
             screen.blit(enemy.image, (((enemy.x * 16) + offset_x), (enemy.y * 16) + offset_y))
         back_button.draw(screen)
         screen.blit(player.current_frame, (player.x + offset_x, player.y + offset_y))
+        screen.blit(merchant.image,((merchant.x * 16) + offset_x,(merchant.y * 16) + offset_y))
         if message and current_time <= message_duration:
             door_message(screen, message)
         health_bar_player.draw(screen)
