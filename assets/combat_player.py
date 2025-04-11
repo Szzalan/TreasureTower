@@ -1,4 +1,5 @@
 import pygame
+import random
 from assets.spritesheet import HandleSpriteSheet
 
 class CombatPlayer(pygame.sprite.Sprite):
@@ -117,8 +118,8 @@ class CombatPlayer(pygame.sprite.Sprite):
             self.death_timer = pygame.time.get_ticks()
             print("Player has died!")
 
-    def attack(self,enemy,dice_roll_value):
-        attack_damage = self.damage + dice_roll_value
+    def attack(self,enemy,dice_roll_value,lucky_die_amount):
+        attack_damage = self.damage + dice_roll_value + (lucky_die_amount * random.randint(1,6))
         print(f"Dice roll value {dice_roll_value}, damage {self.damage}")
         if self.state == "idle" or self.animation_finished:
             self.change_state("attack")

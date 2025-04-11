@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="599ad302-b834-4bb0-8c7b-7b05988ef3e9" name="Changes" comment="Added potion functionality">
-      <change afterPath="$PROJECT_DIR$/assets/merchant.py" afterDir="false" />
+    <list default="true" id="599ad302-b834-4bb0-8c7b-7b05988ef3e9" name="Changes" comment="Added merchant spawn">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/items.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/items.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/playerstate.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/playerstate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/combat_player.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/combat_player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/enemy.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/enemy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/merchant.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/merchant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/combat.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/combat.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/game.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -166,7 +167,7 @@
       <workItem from="1744149073304" duration="352000" />
       <workItem from="1744191457878" duration="19369000" />
       <workItem from="1744331336724" duration="1454000" />
-      <workItem from="1744357621130" duration="5811000" />
+      <workItem from="1744357621130" duration="7683000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <option name="closed" value="true" />
@@ -384,7 +385,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744315095699</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Added merchant spawn">
+      <option name="closed" value="true" />
+      <created>1744377740288</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1744377740288</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -402,7 +411,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added Button class and handled quit event" />
     <MESSAGE value="Added scrolling main menu background" />
     <MESSAGE value="Exported dice functionality" />
     <MESSAGE value="Updated values" />
@@ -427,12 +435,13 @@
     <MESSAGE value="Debugged player and enemy combat animations" />
     <MESSAGE value="Added gold counter and potion WIP" />
     <MESSAGE value="Added potion functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added potion functionality" />
+    <MESSAGE value="Added merchant spawn" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added merchant spawn" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/TreasureTower$how_to_play.coverage" NAME="how_to_play Coverage Results" MODIFIED="1744119975417" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/TreasureTower$combat.coverage" NAME="combat Coverage Results" MODIFIED="1744307070793" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
-    <SUITE FILE_PATH="coverage/TreasureTower$main.coverage" NAME="main Coverage Results" MODIFIED="1744377523634" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/TreasureTower$main.coverage" NAME="main Coverage Results" MODIFIED="1744379409335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/TreasureTower$Main.coverage" NAME="Main Coverage Results" MODIFIED="1743682105990" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/TreasureTower$combat_enemy.coverage" NAME="combat_enemy Coverage Results" MODIFIED="1744304317879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/assets" />
     <SUITE FILE_PATH="coverage/TreasureTower$button.coverage" NAME="button Coverage Results" MODIFIED="1740500624619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/assets" />

@@ -64,11 +64,17 @@ class Merchant(pygame.sprite.Sprite):
         self.image = sprite_loader.get_image(1, 0, 16, 16)
 
     def check_interact(self, player):
-        if ((self.x * 16 == player.x + 1 or self.x * 16 == player.x - 1) and self.y * 16 == player.y) or (
-                (self.y * 16 == player.y + 1 * 16 or self.y * 16 == player.y - 1) and self.x * 16 == player.x):
+        merchant_x, merchant_y = self.x, self.y
+        player_x, player_y = player.x // 16, player.y // 16
+        if merchant_x == player_x and merchant_y == player_y - 1:  # Above
             return True
-        else:
-            return False
+        if merchant_x == player_x and merchant_y == player_y + 1:  # Below
+            return True
+        if merchant_x == player_x - 1 and merchant_y == player_y:  # Left
+            return True
+        if merchant_x == player_x + 1 and merchant_y == player_y:  # Right
+            return True
+        return False
 
     def interact(self,event,player,player_state):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_e:

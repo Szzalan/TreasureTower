@@ -62,7 +62,7 @@ def combat(screen, main_menu,enemy_type,player_state):
             print(f"Dice has landed on {dice_roll_value}")
             if dice_roll_value is not None:
                 print(f"Player rolled a {dice_roll_value}")
-                player.attack(enemy,dice_roll_value)
+                player.attack(enemy,dice_roll_value,player_state.lucky_die_amount)
                 player_attacked = True
             rolling = False
 

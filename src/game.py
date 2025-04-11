@@ -21,7 +21,7 @@ floor_number = 1
 FLOOR_WIDTH = 500
 FLOOR_HEIGHT = 500
 NUM_ROOMS = 5
-player_state = PlayerState(150,0,potion_amount=3)
+player_state = PlayerState(150,150,potion_amount=3)
 
 class GameStates:
     EXPLORATION = "exploration"
@@ -323,7 +323,7 @@ def dungeon_generator():
 def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
     gold = Item(410,5,"Gold")
     potion = Item(410,25,"Potion")
-    lucky_die = Item(0,0,"Lucky_die")
+    lucky_die = Item(410,45,"Lucky_die")
     global player_state, floor_number
     health_bar_player = HealthBar(50, 50, 200, 15,150,player_state.current_health)
     font = pygame.font.Font("../assets/Pixeltype.ttf", 20)
@@ -351,12 +351,17 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
         gold_amount = pygame.font.Font("../assets/Pixeltype.ttf", 50).render(f"{player_state.gold}", False, (255, 255, 255))
         gold_text_x = gold.rect.left - 50
         gold_text_y = gold.rect.centery - 10
+        lucky_die_amount = pygame.font.Font("../assets/Pixeltype.ttf", 50).render(f"{player_state.lucky_die_amount}", False, (255, 255, 255))
+        lucky_die_x = lucky_die.rect.left - 50
+        lucky_die_y = lucky_die.rect.centery - 10
         health_bar_player.hp = player_state.current_health
         current_time = pygame.time.get_ticks()
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if merchant and merchant.check_interact(player):
+                merchant.interact(event,player,player_state)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.rect.collidepoint(event.pos):
@@ -415,5 +420,7 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
         screen.blit(potions_amount, (potions_text_x, potions_text_y))
         screen.blit(gold_amount, (gold_text_x, gold_text_y))
         screen.blit(potion.image,potion.rect.topleft)
+        screen.blit(lucky_die.image,lucky_die.rect.topleft)
+        screen.blit(lucky_die_amount,(lucky_die_x,lucky_die_y))
         pygame.display.flip()
         clock.tick(60)
