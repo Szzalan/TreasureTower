@@ -20,16 +20,24 @@ class BuyMenu:
         menu_background_color = (50,50,50)
         pygame.draw.rect(self.screen,menu_background_color,(self.x,self.y,self.width,self.height))
         for i, item in enumerate(self.items):
-            color = (255,255,0) if i == self.selected_index else (255,255,255)
-            item_text = f"{item.name} - {item.cost} Gold"
-            text = self.font.render(item_text,False,color)
-            self.screen.blit(text,(self.x+10,self.y+10+i*30))
+            border_color = (255, 255, 0) if i == self.selected_index else (255, 255, 255)
+            image_x = self.x + 40 + i * 100
+            image_y = self.y + 30
+            text_y = image_y + 60
+            pygame.draw.rect(self.screen, border_color, (image_x-5, image_y-5, 60, 60), 2)
+            if item.image:
+                self.screen.blit(item.image,(image_x,image_y))
+            name_text = self.font.render(item.name, False, border_color)
+            cost_text = self.font.render(f"{item.cost} Gold", False, border_color)
+            self.screen.blit(name_text, (image_x, text_y))
+            self.screen.blit(cost_text, (image_x, text_y + 20))
+
 
     def handle_input(self,event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_a:
                 self.selected_index = (self.selected_index - 1) % len(self.items)
-            elif event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_d:
                 self.selected_index = (self.selected_index + 1) % len(self.items)
             elif event.key == pygame.K_RETURN:
                 selected_item = self.items[self.selected_index]
@@ -84,7 +92,9 @@ class Merchant(pygame.sprite.Sprite):
                 items = [potion,lucky_die]
                 font = pygame.font.Font("../assets/Pixeltype.ttf",32)
                 screen = pygame.display.get_surface()
-                buy_menu = BuyMenu(items,font,screen,100,100,250,150,player_state)
+                screen_height = pygame.display.get_surface().get_height()
+                screen_width = pygame.display.get_surface().get_width()
+                buy_menu = BuyMenu(items,font,screen,((screen_width-250) // 2),((screen_height-250) // 2),250,150,player_state)
                 while buy_menu.is_open:
                     for event in pygame.event.get():
                         buy_menu.handle_input(event)
