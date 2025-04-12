@@ -3,6 +3,27 @@ import random
 pygame.init()
 
 class Dice(pygame.sprite.Sprite):
+    """
+    Represents a die object in the game's combat state.
+    Attributes:
+        starting_x (int): The x-coordinate of the die's starting position.
+        starting_y (int): The y-coordinate of the die's starting position.
+        image (pygame.Surface): The die's image surface.
+        rect (pygame.Rect): The die's rectangle.
+        gravity (int): The current gravity applied to the dice.
+        jumped (bool): Indicates whether the die is in jump motion.
+        bounced (bool): Indicates whether the dice is in bounce motion.
+        has_landed (bool): Indicates whether the dice has landed.
+        start (bool): Indicates whether the die has stopped the animation.
+        x_offset (int): The current x-offset applied to the dice.
+        jump_strength (int): The strength of the jump applied to the dice.
+        angled_frames (list): A list of surfaces representing the die's angled frames.
+        front_frames (list): A list of surfaces representing the die's front frames.
+        current_frame_index (int): The index of the current frame.
+        frame_counter (int): The counter used to determine when to change frames.
+        ground_level (int): The y-coordinate of the ground level.
+        landed_index (int): The index of the last frame which has the die landed on.
+    """
     def __init__(self, x, y):
         super().__init__()
         self.starting_x = x
@@ -26,10 +47,24 @@ class Dice(pygame.sprite.Sprite):
 
     @staticmethod
     def scale_frames(frames, scale_factor):
+        """
+        Scales a list of surfaces by a specified factor.
+
+        Args:
+            frames (list): List of surface objects representing the frames to scale.
+            scale_factor (float): The factor by which the frame dimensions should be scaled.
+
+        :returns list: List of scaled frames.
+        """
         return [pygame.transform.scale(frame, (frame.get_width() * scale_factor,frame.get_height() * scale_factor))
                 for frame in frames]
     @staticmethod
     def angled_dice():
+        """
+        Loads and returns a list of surfaces representing all angled die face images.
+
+        :returns list: A list representing all the die's angled face images.
+        """
         dice_angled_1_surf = pygame.image.load("../assets/dice_faces/angled-left&right-1.png").convert_alpha()
         dice_angled_left_2_surf = pygame.image.load("../assets/dice_faces/angled-left-2.png").convert_alpha()
         dice_angled_right_2_surf = pygame.image.load("../assets/dice_faces/angled-right-2.png").convert_alpha()
@@ -45,6 +80,11 @@ class Dice(pygame.sprite.Sprite):
                           dice_angled_left_6_surf, dice_angled_right_6_surf]
     @staticmethod
     def front_dice():
+        """
+        Loads and returns a list of images representing all front faces.
+
+        :returns list: A list representing all the die's front face images.
+        """
         dice_front_1_surf = pygame.image.load("../assets/dice_faces/front&side-1.png").convert_alpha()
         dice_front_2_surf = pygame.image.load("../assets/dice_faces/front-2.png").convert_alpha()
         dice_front_3_surf = pygame.image.load("../assets/dice_faces/front-3.png").convert_alpha()
@@ -55,11 +95,14 @@ class Dice(pygame.sprite.Sprite):
         return [dice_front_1_surf, dice_front_2_surf, dice_front_3_surf, dice_front_4_surf, dice_front_5_surf, dice_front_6_surf]
 
     def roll_dice_start(self):
-        print("Roll started: Reset has_landed and landed_index")
-        if self.start and self.rect.bottom >= self.ground_level:
-            self.rect.midbottom = (self.starting_x, self.starting_y)
+        """
+        Starts the dice roll animation. Resets the die into it's starting position.
+        Initiates the jump motion.
+        """
+        if self.start and self.rect.bottom == self.ground_level:
+            self.rect.midbottom = (self.starting_x, self.starting_y) # reset to starting position
             self.x_offset = 0
-            self.gravity = -self.jump_strength
+            self.gravity = -self.jump_strength #applies gravity for jump
             self.jumped = True
             self.bounced = False
             self.start = False
@@ -67,6 +110,11 @@ class Dice(pygame.sprite.Sprite):
             self.landed_index = None
 
     def roll_animation(self):
+        """
+        Cycles through the dice frames immitating a rolling dice.
+        If it touches the ground it chooses from front facing frames instead.
+        If the animation has ended, it generates a random index and set it as the last frame.
+        """
         if self.rect.bottom < self.ground_level and self.frame_counter % 2 == 0:
             self.current_frame_index = (self.current_frame_index + 1) % len(self.angled_frames)
             self.image = self.angled_frames[self.current_frame_index]
@@ -80,6 +128,9 @@ class Dice(pygame.sprite.Sprite):
             self.image = self.front_frames[self.landed_index - 1]
 
     def apply_gravity(self):
+        """
+        Controls the die's movement during the animation depending on the motion.
+        """
         if self.jumped or self.bounced:
             self.gravity += 1
             self.rect.y += self.gravity
@@ -103,12 +154,23 @@ class Dice(pygame.sprite.Sprite):
                 self.has_landed = True
 
     def update(self):
+        """
+        Controls the speed of the die's frame switching.
+        Controls the motion of the die and updates the animation to reflect
+        the motion.
+        """
         self.frame_counter += 1
         self.apply_gravity()
         self.roll_animation()
 
 
     def roll_value(self):
+        """
+        Computes the last frame's value for combat purposes.
+
+        :returns int or None: Returns an integer value based on the last frame of the animation or None if the
+            object has not landed.
+        """
         if self.has_landed and self.landed_index is not None:
             if self.landed_index == 6:
                 return self.landed_index * 2

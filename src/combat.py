@@ -12,6 +12,19 @@ pygame.init()
 clock = pygame.time.Clock()
 
 def combat(screen, main_menu,enemy_type,player_state):
+    """
+    Handles the combat sequence between the player and an enemy. Manages all aspects of the combat, including
+    dice rolling, turn-based combat, player's states and endgame states.
+
+    Args:
+        screen(pygame.Surface): The Pygame screen surface where the combat will be rendered.
+        main_menu(Callable): A callable function that, when invoked, transitions the user back to the main menu when
+        endgame states are achieved.
+        enemy_type(str): The type of the enemy encountered during exploration state.
+        player_state(PlayerState): The player's current state.
+
+    :returns str: A string indicating the outcome of the fight when the enemy is defeated, "ENEMY_DEFEATED".
+    """
     endgame_text = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 100).render("GAME OVER!", False, (255, 255, 255))
     victory_text = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 100).render("YOU WIN!", False, (255, 255, 255))
 

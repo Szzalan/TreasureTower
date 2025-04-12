@@ -3,7 +3,33 @@ import pygame
 import assets.spritesheet as spritesheet
 
 class Player(pygame.sprite.Sprite):
+    """
+    Represents the player in the game's exploration state.
+
+    Attributes:
+        x (int): The x-coordinate of the player.
+        y (int): The y-coordinate of the player.
+        width (int): The width of the player.
+        height (int): The height of the player.
+        image (pygame.Surface): The player's image.
+        current_frame (pygame.Surface): The current animation frame of the player.
+        frame_index (int): The index of the current animation frame.
+        facing (str): The direction the player is facing.
+        running (bool): Whether the player is currently moving.
+        pre_x (int): The previous x-coordinate of the player.
+        pre_y (int): The previous y-coordinate of the player.
+        frames (dict): A dictionary containing the player's animation frames.
+    """
     def __init__(self, x, y, width, height):
+        """
+        Initializes the Player object with the provided parameters.
+
+        Args:
+            x (int): The x-coordinate of the player.
+            y (int): The y-coordinate of the player.
+            width (int): The width of the player.
+            height (int): The height of the player.
+        """
         super().__init__()
         self.x = x
         self.y = y
@@ -30,6 +56,9 @@ class Player(pygame.sprite.Sprite):
         self.load_frames()
 
     def load_frames(self):
+        """
+        Loads the player's animation frames from the sprite sheet and associates them with their respective dictionary keys.
+        """
         sprite_sheet = spritesheet.HandleSpriteSheet(self.image)
         self.frames["right_idle"] = [sprite_sheet.get_image(0, 0, 16, 16, offset_v=8)]
         self.frames["left_idle"] = [sprite_sheet.get_image(1, 0, 16, 16, offset_v=8)]
@@ -46,10 +75,23 @@ class Player(pygame.sprite.Sprite):
         self.current_frame = self.frames["front_idle"][0]
 
     def animation_loop(self):
-        if not self.running:  # If player is not moving
+        """
+        Handles the player's frames when the player isn't moving.
+        """
+        if not self.running:
             self.current_frame = self.frames[self.facing + "_idle"][0]
 
     def move(self, dx, dy,dungeon_map, event):
+        """
+        Moves the player based on the provided input. Validates the move and updates the player's position if it's valid.
+        Checks if the player has moved.
+
+        Args:
+            dx (int): The x-coordinate change.
+            dy (int): The y-coordinate change.
+            dungeon_map (list): The list representing the dungeon.
+            event (pygame.event): The event object representing the user input.
+        """
         new_x = self.x
         new_y = self.y
         self.running = False

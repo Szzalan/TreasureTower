@@ -7,6 +7,14 @@ clock = pygame.time.Clock()
 
 
 def how_to_play(screen, main_menu):
+    """
+    Displays the How to Play screen, which provides the player with instructions on the game's controls
+    and objectives.
+
+    Args:
+        screen(pygame.Surface): The Pygame screen surface where the How to Play screen will be rendered.
+        main_menu(Callable): A callable function that, when invoked, transitions the user back to the main menu.
+    """
     text = "Your goal is to collect the treasure on top of the tower."
     text2 = "You can move using the W, A, S and D keys and interact with entities using the E key."
     text3 = "To claim the final treasure,you need to reach the end of the tower and kill the boss."

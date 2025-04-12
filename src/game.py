@@ -23,97 +23,98 @@ NUM_ROOMS = 5
 player_state = PlayerState(150,50,potion_amount=3)
 
 class GameStates:
+    """
+    Defines the states for the game lifecycle.
+
+    Attributes:
+        EXPLORATION(str): Represents the exploration state of the game.
+        COMBAT(str): Represents the combat state of the game.
+    """
     EXPLORATION = "exploration"
     COMBAT = "combat"
 
-def return_to_exploration(screen,main_menu, saved_dungeon_map=None, enemy_metadata=None):
-    print("Returning to exploration mode!")
-    if saved_dungeon_map and enemy_metadata:
-        game(screen,main_menu,saved_dungeon_map,enemy_metadata)
+class Room:
+    """
+    Represents a rectangular room in a dungeon map environment.
 
-    else:# Launch the appropriate game/exploration logic
-        print("Error: No saved dungeon map or enemy metadata!")
+    Attributes:
+        x(int): The x-coordinate of the top-left corner of the room in the grid.
+        y(int): The y-coordinate of the top-left corner of the room in the grid.
+        width(int): The width of the room.
+        height(int): The height of the room.
+        TILE(pygame.Surface): The image representation of the floor tile for the room.
+        WALL(pygame.Surface): The image representation of the wall tile for the room.
+        TRAPDOOR(pygame.Surface): The image representation of the trapdoor entity.
+        DOOR(pygame.Surface): The image representation of the door entity.
+    """
+    def __init__(self, x, y, width, height):
+        """
+        Initializes a Room object with the specified coordinates and dimensions.
 
-def load_dungeon(saved_dungeon_map, enemy_metadata):
-    if saved_dungeon_map is None:
-        raise ValueError("No saved dungeon map found.")
-    enemy_group = pygame.sprite.Group()
-    player_spawn = None
-    for enemy_data in enemy_metadata['enemies']:
-        spawn_x = enemy_data['x']
-        spawn_y = enemy_data['y']
-        enemy_type = enemy_data['type']
-        killed = enemy_data['killed']
-        spawned = enemy_data['spawned']
-        if not killed:
-            enemy = Enemy(spawn_y, spawn_x, enemy_type)
-            enemy_group.add(enemy)
-        elif killed and not spawned:
-            player_spawn = (spawn_x,spawn_y)
-            enemy_data['spawned'] = True
-    floor_list, wall_list, _ = sort_tile_types(saved_dungeon_map)
-    entity_pos = copy.deepcopy(enemy_metadata)
-    return player_spawn,enemy_group,entity_pos
+        Args:
+            x (int): The x-coordinate of the top-left corner of the room.
+            y (int): The y-coordinate of the top-left corner of the room.
+            width (int): The width of the room.
+            height (int): The height of the room.
+        """
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
 
-def entity_spawner(dungeon_map,enemy_types):
-    """SPAWNS THE ENTITIES IN THE DUNGEON"""
-    enemy_group = pygame.sprite.Group()
-    entity_positions = {'trapdoor' : None, 'door' : None, 'enemies': [], 'merchant': None}
-    floor_list, wall_list, _ = sort_tile_types(dungeon_map)
+    TILE = None
+    WALL = None
+    TRAPDOOR = None
+    DOOR = None
 
-    player_spawn = random.choice(floor_list)
-    trapdoor_pos = player_spawn
-    dungeon_map[player_spawn[0]][player_spawn[1]] = "TRAPDOOR"
-    entity_positions['trapdoor'] = trapdoor_pos
+    @classmethod
+    def load_images(cls):
+        """
+        Loads images for visual elements within the Room.
+        """
+        cls.TILE = pygame.image.load("../assets/map_assets/dongeonWallFloorTransparent1.png").convert_alpha()
+        cls.WALL = pygame.image.load("../assets/map_assets/dongeonWallFloorTransparent10.png").convert_alpha()
+        cls.TRAPDOOR = pygame.image.load("../assets/map_entities/trapdoor.png").convert_alpha()
+        cls.DOOR = pygame.image.load("../assets/map_entities/door.png").convert_alpha()
 
-    door_spawn = random.choice(wall_list)
-    dungeon_map[door_spawn[0]][door_spawn[1]] = "DOOR"
+    def center(self):
+        """
+        Calculates the center coordinates of the room.
 
-    entity_positions['door'] = door_spawn
-    floor_list.remove(player_spawn)
-    merchant_spawn = random.choice(floor_list)
-    entity_positions['merchant'] = merchant_spawn
-    floor_list.remove(merchant_spawn)
-    if floor_number == 10:
-        spawn_x, spawn_y = random.choice(floor_list)
-        enemy = Enemy(spawn_y,spawn_x,"boss")
-        enemy_group.add(enemy)
-        floor_list.remove((spawn_x,spawn_y))
-        entity_positions['enemies'].append({'x': spawn_x, 'y': spawn_y, 'type': "boss", 'killed': False, 'spawned': False})
-    else:
-        for _ in range(NUM_ROOMS):
-            spawn_x, spawn_y = random.choice(floor_list)
-            enemy_type = random.choice(enemy_types)
-            enemy = Enemy(spawn_y,spawn_x,enemy_type)
-            enemy_group.add(enemy)
-            floor_list.remove((spawn_x,spawn_y))
-            entity_positions['enemies'].append({'x': spawn_x, 'y': spawn_y, 'type': enemy_type, 'killed': False, 'spawned': False})
+        :returns int: The center coordinates of the room.
+        """
+        center_x = self.x + self.width // 2
+        center_y = self.y + self.height // 2
+        return center_x, center_y
 
-    return player_spawn, enemy_group, entity_positions
+    def check_overlap(self,other_room):
+        """
+        Checks if the room overlaps with another room.
 
-def door_message(screen,message):
-    if message:
-        font = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 36)
-        text_surf = font.render(message,False,(255,255,255))
-        text_rect = text_surf.get_rect(center=(screen.get_width()/2,650))
-        screen.blit(text_surf,text_rect)
+        Args:
+            other_room (Room): The other room to check for overlap.
 
-def door_interact(door_spawn,player_pos,event,enemy_group):
-    adjacent_positions = [
-        (door_spawn[0] + 1, door_spawn[1]),  # Right
-        (door_spawn[0] - 1, door_spawn[1]),  # Left
-        (door_spawn[0], door_spawn[1] + 1),  # Down
-        (door_spawn[0], door_spawn[1] - 1)  # Up
-    ]
-    if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
-        if player_pos in adjacent_positions:
-            if len(enemy_group) > 0:
-                return "Kill all enemies to progress to the next floor"
-            else:
-                return True
-        return False
+        :returns bool: True if the rooms overlap, False otherwise.
+        """
+        tile_width = Room.TILE.get_width()
+        tile_height = Room.TILE.get_height()
+
+        return (
+            self.x // tile_width < (other_room.x + other_room.width) // tile_width
+            and (self.x + self.width) // tile_width > other_room.x // tile_width
+            and self.y // tile_height < (other_room.y + other_room.height) // tile_height
+            and (self.y + self.height) // tile_height > other_room.y // tile_height
+                    )
 
 def sort_tile_types(dungeon_map):
+    """
+    Sorts tile types in a dungeon map into floor tiles, wall tiles, and corner tiles.
+
+    Args:
+        dungeon_map (list[list[str]]): A 2D list where each element represents a tile in the dungeon.
+
+    :returns list[tuple[int, int]]: A list of tuples representing positions (y, x) of floor tiles.
+    """
     floor_list = []
     wall_list = []
     corner_list = []
@@ -131,42 +132,58 @@ def sort_tile_types(dungeon_map):
 
     return floor_list, wall_list, corner_list
 
-class Room:
-    def __init__(self, x, y, width, height):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+def update_wall_boundaries(dungeon_map):
+    """
+    Updates wall boundaries in a dungeon map based on floor tiles. Check floor tiles neighbors for walls.
+    Updates the new map with said floor,corridor, and wall tiles.
 
-    TILE = None
-    WALL = None
-    TRAPDOOR = None
-    DOOR = None
+    Arg:
+        dungeon_map (list[list[str]]): A 2D list where each element represents a tile in the dungeon.
 
-    @classmethod
-    def load_images(cls):
-        cls.TILE = pygame.image.load("../assets/map_assets/dongeonWallFloorTransparent1.png").convert_alpha()
-        cls.WALL = pygame.image.load("../assets/map_assets/dongeonWallFloorTransparent10.png").convert_alpha()
-        cls.TRAPDOOR = pygame.image.load("../assets/map_entities/trapdoor.png").convert_alpha()
-        cls.DOOR = pygame.image.load("../assets/map_entities/door.png").convert_alpha()
+    :returns list[list[str]]: A new 2D list representing the updated dungeon map with updated wall boundaries.
+    """
+    map_height = len(dungeon_map)
+    map_width = len(dungeon_map[0])
+    new_map = [["EMPTY" for _ in range(map_width)] for _ in range(map_height)]
 
-    def center(self):
-        center_x = self.x + self.width // 2
-        center_y = self.y + self.height // 2
-        return center_x, center_y
+    for y in range(map_height):
+        for x in range(map_width):
+            if dungeon_map[y][x] in ["FLOOR", "CORRIDOR"]:
+                new_map[y][x] = dungeon_map[y][x]
+                for dy in [-1, 0,1]:
+                    for dx in [-1, 0,1]:
+                        neighbor_x = x + dx
+                        neighbor_y = y + dy
 
-    def check_overlap(self,other_room):
-        tile_width = Room.TILE.get_width()
-        tile_height = Room.TILE.get_height()
+                        if 0 <= neighbor_x < map_width and 0 <= neighbor_y < map_height:
+                            if dungeon_map[neighbor_y][neighbor_x] == "WALL":
+                                new_map[neighbor_y][neighbor_x] = "WALL"
+    return new_map
 
-        return (
-            self.x // tile_width < (other_room.x + other_room.width) // tile_width
-            and (self.x + self.width) // tile_width > other_room.x // tile_width
-            and self.y // tile_height < (other_room.y + other_room.height) // tile_height
-            and (self.y + self.height) // tile_height > other_room.y // tile_height
-                    )
+def create_empty_map(map_width, map_height):
+    """
+    Creates a new dungeon map filled with wall tiles.
+
+    Args:
+        map_width (int): The width of the map.
+        map_height (int): The height of the map.
+
+    :returns list[list[str]]: A 2D list representing the map with only wall tiles
+    """
+    return [["WALL" for x in range(map_width)] for _ in range(map_height)]
 
 def generate_rooms(floor_width, floor_height,num_rooms):
+    """
+    Generates a list of non-overlapping rooms given the floor dimensions and number of rooms
+    to create. Applies a buffer to ensure the rooms are inside the floor boundaries.
+
+    Args:
+        floor_width (int): The width of the floor where rooms will be placed.
+        floor_height (int): The height of the floor where rooms will be placed.
+        num_rooms (int): The number of rooms to generate.
+
+    :returns list[Room]: A list of Room objects representing generated non-overlapping rooms
+    """
     rooms = []
     tile_width = Room.TILE.get_width()
     min_room_size = tile_width * 3
@@ -185,6 +202,14 @@ def generate_rooms(floor_width, floor_height,num_rooms):
     return rooms
 
 def carve_rooms(room_list, dungeon_map):
+    """
+    Iterates over a list of rooms and replaces corresponding wall tiles with floor tiles
+    in the dungeon map.
+
+    Args:
+        room_list (list[Room]): A list of Room objects representing non-overlapping rooms.
+        dungeon_map (list[list[str]]): A 2D list representing the dungeon map.
+    """
     tile_width = Room.TILE.get_width()
     tile_height = Room.TILE.get_height()
 
@@ -194,6 +219,14 @@ def carve_rooms(room_list, dungeon_map):
                 dungeon_map[y][x] = "FLOOR"
 
 def carve_corridors(rooms,dungeon_map):
+    """
+    Checks the centre coordinates of each room in a list and replaces "WALL" tiles with "CORRIDOR" tiles.
+    Iterates over the x,y coordinates between the centers of two adjacent rooms.
+
+    Args:
+        rooms (list[Room]): A list of Room objects representing non-overlapping rooms.
+        dungeon_map (list[list[str]]): A 2D list representing the dungeon map.
+    """
     for i in range(len(rooms) - 1):
         room_a = rooms[i]
         room_b = rooms[i + 1]
@@ -210,19 +243,45 @@ def carve_corridors(rooms,dungeon_map):
             if dungeon_map[y][center_b[0]] == "WALL":
                 dungeon_map[y][center_b[0]] = "CORRIDOR"
 
-def create_empty_map(map_width, map_height):
-    return [["WALL" for x in range(map_width)] for _ in range(map_height)]
-
 def rotate_walls(dungeon_map,x ,y):
+    """
+    Rotate the walls inside the dungeon map based on their neighboring cells.
+
+    Args:
+        dungeon_map (list[list[str]]): A 2D list representing the dungeon map.
+        x (int): The x-coordinate of the cell to inspect.
+        y (int): The y-coordinate of the cell to inspect.
+
+    :returns str: A string describing the determined rotated state for the cell, such as "right_turn",
+             "left_turn" or "wall" for non-rotated walls.
+    """
     map_height = len(dungeon_map)
     map_width = len(dungeon_map[0])
 
     def is_wall(x,y):
+        """
+        Check if the cell is a wall or door.
+
+        Args:
+            x (int): The x-coordinate of the cell to inspect.
+            y (int): The y-coordinate of the cell to inspect.
+
+        :returns bool: True if the cell is a wall or door, False otherwise.
+        """
         if 0 <= x < map_width and 0 <= y < map_height:
             return dungeon_map[y][x] == "WALL" or dungeon_map[y][x] == "DOOR"
         return False
 
     def is_floor_or_corridor(x,y):
+        """
+        Check if the cell is a floor or corridor or trapdoor.
+
+        Args:
+            x (int): The x-coordinate of the cell to inspect.
+            y (int): The y-coordinate of the cell to inspect.
+
+        :returns bool: True if the cell is a floor or corridor or trapdoor, False otherwise.
+        """
         if 0 <= x < map_width and 0 <= y < map_height:
             return (dungeon_map[y][x] == "FLOOR" or dungeon_map[y][x] == "CORRIDOR"
                     or dungeon_map[y][x] == "TRAPDOOR")
@@ -241,6 +300,16 @@ def rotate_walls(dungeon_map,x ,y):
         return "wall"
 
 def generate_dungeon_surface(dungeon_map):
+    """
+    Generates a surface representation of the dungeon based on the provided
+    dungeon map. Rotates the walls based on their neighboring cells.
+
+    Arg:
+        dungeon_map (list[list[str]]): A 2D list representing the dungeon map.
+
+    :returns (pygame.Surface),(None): A PyGame surface object containing the generated dungeon layout.
+        Returns None if the input dungeon_map is empty or None.
+    """
     if dungeon_map is None or len(dungeon_map) == 0:
         print("Error: dungeon_map is empty or None in generate_dungeon_surface.")
         return None
@@ -282,7 +351,190 @@ def generate_dungeon_surface(dungeon_map):
                 dungeon_surf.blit(Room.TRAPDOOR, (x_pixel_pos, y_pixel_pos))
     return dungeon_surf
 
+def dungeon_generator():
+    """
+    Generates a random dungeon map with rooms, corridors, and spawns for player and enemies
+    and other entities.
+
+    :returns tuple[list[list[str]], list[Room], tuple[int, int], pygame.sprite.Group, dict[str, list]]:
+        - The dungeon layout as a 2D list of strings representing tile types.
+        - The list of rooms inside the dungeon.
+        - The coordinates of the player's spawn location.
+        - A sprite group containing all enemy instances created in the dungeon level.
+        - A dictionary containing positions of the dungeon entities:
+            'trapdoor': The position of the trapdoor.
+            'door': The position of the door.
+            'enemies': A list of enemy data.
+            'merchant': The position of the merchant.
+    """
+    dungeon_map = create_empty_map(FLOOR_WIDTH, FLOOR_HEIGHT)
+    rooms = generate_rooms(FLOOR_WIDTH, FLOOR_HEIGHT, NUM_ROOMS)
+    carve_rooms(rooms, dungeon_map)
+    carve_corridors(rooms, dungeon_map)
+    dungeon_map = update_wall_boundaries(dungeon_map)
+    player_spawn,enemy_group,entity_positions = entity_spawner(dungeon_map,["slime","skeleton","zombie"])
+
+    return dungeon_map,rooms,player_spawn,enemy_group,entity_positions
+
+def load_dungeon(saved_dungeon_map, saved_entity_pos):
+    """
+    Loads the saved dungeon map and initializes entities based on saved data.
+
+    Args:
+        saved_dungeon_map (Any): The saved dungeon layout to be loaded.
+        saved_entity_pos (dict[str,list]): Data containing information about enemies and
+        other entities in the dungeon.
+
+    :returns tuple[tuple[int, int], pygame.sprite.Group, dict[str,list]]:
+        - The coordinates of the player's spawn location.
+        - A sprite group containing all enemy instances created in the dungeon level.
+        - A dictionary containing positions of the dungeon entities:
+            'trapdoor': The position of the trapdoor.
+            'door': The position of the door.
+            'enemies': A list of enemy data.
+            'merchant': The position of the merchant.
+    """
+    if saved_dungeon_map is None:
+        raise ValueError("No saved dungeon map found.")
+    enemy_group = pygame.sprite.Group()
+    player_spawn = None
+    for enemy_data in saved_entity_pos['enemies']:
+        spawn_x = enemy_data['x']
+        spawn_y = enemy_data['y']
+        enemy_type = enemy_data['type']
+        killed = enemy_data['killed']
+        spawned = enemy_data['spawned']
+        if not killed:
+            enemy = Enemy(spawn_y, spawn_x, enemy_type)
+            enemy_group.add(enemy)
+        elif killed and not spawned:
+            player_spawn = (spawn_x,spawn_y)
+            enemy_data['spawned'] = True
+    floor_list, wall_list, _ = sort_tile_types(saved_dungeon_map)
+    entity_pos = copy.deepcopy(saved_entity_pos)
+    return player_spawn,enemy_group,entity_pos
+
+def return_to_exploration(screen,main_menu, saved_dungeon_map=None, saved_entity_pos=None):
+    """
+    Handles the process of returning to the exploration state in the game after combat
+    state.
+
+    Args:
+        screen (pygame.Surface): The display surface where the game will be rendered.
+        main_menu (Any): Reference to the main menu for restarting or exiting the game.
+        saved_dungeon_map (Any): The saved dungeon layout to be loaded.
+        saved_entity_pos (dict[str,list]): Data containing information about enemies and
+        other entities in the dungeon.
+    """
+    print("Returning to exploration mode!")
+    if saved_dungeon_map and saved_entity_pos:
+        game(screen,main_menu,saved_dungeon_map,saved_entity_pos)
+
+    else:
+        print("Error: No saved dungeon map or enemy data!")
+
+def door_message(screen,message):
+    """
+    Checks if a message is provided and displays it on the screen if it is not None.
+
+    Args:
+        screen (pygame.Surface): The display surface where the message will be rendered.
+        message (str): The message to be displayed on the screen.
+    """
+    if message:
+        font = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 36)
+        text_surf = font.render(message,False,(255,255,255))
+        text_rect = text_surf.get_rect(center=(screen.get_width()/2,650))
+        screen.blit(text_surf,text_rect)
+
+def door_interact(door_spawn,player_pos,event,enemy_group):
+    """
+    Handles interaction with a door during the game based on the player's position,
+    the event triggered, and state of the enemies in the game.
+
+    Args:
+        door_spawn (tuple[int, int]): The coordinates of the door's spawn point on the dungeon map.
+        player_pos (tuple[int, int]): The current position of the player on the dungeon map.
+        event (pygame.event.Event): The event object that represents user input.
+        enemy_group (pygame.sprite.Group): A group of enemy objects currently present in the game.
+
+        :returns str or bool: A message indicating how to go to the next floor or
+        bool if there aren't any enemies left to defeat.
+    """
+    adjacent_positions = [
+        (door_spawn[0] + 1, door_spawn[1]),  # Right
+        (door_spawn[0] - 1, door_spawn[1]),  # Left
+        (door_spawn[0], door_spawn[1] + 1),  # Down
+        (door_spawn[0], door_spawn[1] - 1)  # Up
+    ]
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
+        if player_pos in adjacent_positions:
+            if len(enemy_group) > 0:
+                return "Kill all enemies to progress to the next floor"
+            else:
+                return True
+        return False
+
+def entity_spawner(dungeon_map,enemy_types):
+    """
+    Spawns dungeon entities within a dungeon map and creates a group for spawned enemies to be managed.
+
+    Args:
+        dungeon_map (list[list[str]]): A 2D list representing the dungeon map.
+        enemy_types (list[str]): A list containing different enemy type names.el.
+
+    :returns tuple[tuple[int, int], pygame.sprite.Group, dict[str, list]]:
+        - The coordinates of the player's spawn location.
+        - A sprite group containing all enemy instances created in the dungeon level.
+        - A dictionary containing positions of the dungeon entities:
+            'trapdoor': The position of the trapdoor.
+            'door': The position of the door.
+            'enemies': A list of enemy data.
+            'merchant': The position of the merchant.
+    """
+    enemy_group = pygame.sprite.Group()
+    entity_positions = {'trapdoor' : None, 'door' : None, 'enemies': [], 'merchant': None}
+    floor_list, wall_list, _ = sort_tile_types(dungeon_map)
+
+    player_spawn = random.choice(floor_list)
+    trapdoor_pos = player_spawn
+    dungeon_map[player_spawn[0]][player_spawn[1]] = "TRAPDOOR"
+    entity_positions['trapdoor'] = trapdoor_pos
+
+    door_spawn = random.choice(wall_list)
+    dungeon_map[door_spawn[0]][door_spawn[1]] = "DOOR"
+
+    entity_positions['door'] = door_spawn
+    floor_list.remove(player_spawn)
+    merchant_spawn = random.choice(floor_list)
+    entity_positions['merchant'] = merchant_spawn
+    floor_list.remove(merchant_spawn)
+    if floor_number == 10:
+        spawn_x, spawn_y = random.choice(floor_list)
+        enemy = Enemy(spawn_y,spawn_x,"boss")
+        enemy_group.add(enemy)
+        floor_list.remove((spawn_x,spawn_y))
+        entity_positions['enemies'].append({'x': spawn_x, 'y': spawn_y, 'type': "boss", 'killed': False, 'spawned': False})
+    else:
+        for _ in range(NUM_ROOMS):
+            spawn_x, spawn_y = random.choice(floor_list)
+            enemy_type = random.choice(enemy_types)
+            enemy = Enemy(spawn_y,spawn_x,enemy_type)
+            enemy_group.add(enemy)
+            floor_list.remove((spawn_x,spawn_y))
+            entity_positions['enemies'].append({'x': spawn_x, 'y': spawn_y, 'type': enemy_type, 'killed': False, 'spawned': False})
+
+    return player_spawn, enemy_group, entity_positions
+
 def draw_dungeon(screen, dungeon_surf):
+    """
+    Draws the dungeon surface onto the provided screen surface, centrally aligning it
+    based on the dimensions of both the dungeon surface and the screen.
+
+    Args:
+        screen (pygame.Surface): The main display surface where the dungeon will be rendered.
+        dungeon_surf (pygame.Surface): The surface representing the dungeon to be drawn.
+    """
     dungeon_width = dungeon_surf.get_width()
     dungeon_height = dungeon_surf.get_height()
     global offset_x, offset_y
@@ -294,36 +546,18 @@ def draw_dungeon(screen, dungeon_surf):
 
     screen.blit(dungeon_surf, (offset_x, offset_y))
 
-def update_wall_boundaries(dungeon_map):
-    map_height = len(dungeon_map)
-    map_width = len(dungeon_map[0])
-    new_map = [["EMPTY" for _ in range(map_width)] for _ in range(map_height)]
+def game(screen, main_menu,dungeon_map = None,saved_entity_pos = None):
+    """
+    Plays the dungeon-crawling game loop, initializing or continuing the gameplay with
+    necessary entities. It handles game states, player interactions, enemy encounters.
 
-    for y in range(map_height):
-        for x in range(map_width):
-            if dungeon_map[y][x] in ["FLOOR", "CORRIDOR"]:
-                new_map[y][x] = dungeon_map[y][x]
-                for dy in [-1, 0,1]:
-                    for dx in [-1, 0,1]:
-                        neighbor_x = x + dx
-                        neighbor_y = y + dy
+    Args:
+        screen (pygame.Surface): The Pygame surface where the game will be rendered.
+        main_menu (Any): Reference to the main menu for restarting or exiting the game.
+        dungeon_map (list[list[str]]): Optional existing dungeon map for resuming gameplay.
+        saved_entity_pos (dict): Optional data for retaining existing enemy data.
 
-                        if 0 <= neighbor_x < map_width and 0 <= neighbor_y < map_height:
-                            if dungeon_map[neighbor_y][neighbor_x] == "WALL":
-                                new_map[neighbor_y][neighbor_x] = "WALL"
-    return new_map
-
-def dungeon_generator():
-    dungeon_map = create_empty_map(FLOOR_WIDTH, FLOOR_HEIGHT)
-    rooms = generate_rooms(FLOOR_WIDTH, FLOOR_HEIGHT, NUM_ROOMS)
-    carve_rooms(rooms, dungeon_map)
-    carve_corridors(rooms, dungeon_map)
-    dungeon_map = update_wall_boundaries(dungeon_map)
-    player_spawn,enemy_group,entity_positions = entity_spawner(dungeon_map,["slime","skeleton","zombie"])
-
-    return dungeon_map,rooms,player_spawn,enemy_group,entity_positions
-
-def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
+    """
     gold = Item(410,5,"Gold")
     potion = Item(410,25,"Potion")
     lucky_die = Item(410,45,"Lucky_die")
@@ -334,10 +568,12 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
     message = ""
     message_duration = 0
     Room.load_images()
+
     if dungeon_map is None:
         dungeon_map,rooms,player_spawn,enemy_group,entity_pos = dungeon_generator()
     else:
-        player_spawn, enemy_group, entity_pos = load_dungeon(dungeon_map,enemy_metadata)
+        player_spawn, enemy_group, entity_pos = load_dungeon(dungeon_map,saved_entity_pos)
+
     player_start = player_spawn
     merchant = Merchant(entity_pos['merchant'][1],entity_pos['merchant'][0])
     player = Player(player_start[1] * 16, player_start[0] * 16, 16, 16)
@@ -346,6 +582,7 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
     state = GameStates.EXPLORATION
     dungeon_map[merchant.y][merchant.x] = "MERCHANT"
     running = True
+
     while running:
         potions_amount = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 50).render(f"{player_state.potion_amount}", False, (255, 255, 255))
         potions_text_x = potion.rect.left - 50
@@ -384,7 +621,7 @@ def game(screen, main_menu,dungeon_map = None,enemy_metadata = None):
                     print("Proceeding to the next floor...")
                     dungeon_map = None  # Clear the current dungeon map
                     saved_dungeon_map = None
-                    enemy_metadata = None
+                    saved_entity_pos = None
                     dungeon_surface = None
                     game(screen, main_menu)  # Restart the game function to regenerate the dungeon
                     return  # Exit the current loop to avoid conflicting with the new game call

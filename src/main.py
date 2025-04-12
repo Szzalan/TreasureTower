@@ -9,11 +9,14 @@ from src.game import game
 
 # pygame setup
 pygame.init()
+player_state = PlayerState(150, 50,potion_amount = 3,lucky_die_amount = 1)
 screen = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption('Treasure Tower')
 
 def main_menu():
-    player_state = PlayerState(150,0)
+    """
+    Displays the main menu for the game enabling the player to choose between playing or quitting.
+    """
     clock = pygame.time.Clock()
     title = pygame.font.Font("../assets/map_entities/Pixeltype.ttf", 100).render("Treasure Tower", False, (255, 255, 255))
     quit_button = Button((screen.get_width() / 2, screen.get_height() / 2 + 180), "Quit")

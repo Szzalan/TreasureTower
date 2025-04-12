@@ -4,7 +4,35 @@ from assets.items import Item
 
 pygame.init()
 class BuyMenu:
+    """
+    Manages the buy menu for the merchant.
+
+    Attributes:
+        items (list): A list of items available for purchase.
+        font (pygame.font.Font): The font used for rendering text.
+        screen (pygame.Surface): The surface on which the menu is rendered.
+        x (int): The x-coordinate of the top-left corner of the menu.
+        y (int): The y-coordinate of the top-left corner of the menu.
+        width (int): The width of the menu.
+        height (int): The height of the menu.
+        selected_index (int): The index of the currently selected item.
+        is_open (bool): Whether the menu is open.
+        player_state (PlayerState): The player's current state.
+    """
     def __init__(self,items,font,screen,x,y,width,height,player_state):
+        """
+        Initializes the BuyMenu object.
+
+        Args:
+            items (list): A list of items available for purchase.
+            font (pygame.font.Font): The font used for rendering text.
+            screen (pygame.Surface): The surface on which the menu is rendered.
+            x (int): The x-coordinate of the top-left corner of the menu.
+            y (int): The y-coordinate of the top-left corner of the menu.
+            width (int): The width of the menu.
+            height (int): The height of the menu.
+            player_state (PlayerState): The player's current state.
+        """
         self.items = items
         self.font = font
         self.screen = screen
@@ -17,6 +45,9 @@ class BuyMenu:
         self.player_state = player_state
 
     def render(self):
+        """
+        Renders the BuyMenu,text and images for the menu and handles their positioning.
+        """
         menu_background_color = (50,50,50)
         pygame.draw.rect(self.screen,menu_background_color,(self.x,self.y,self.width,self.height))
         for i, item in enumerate(self.items):
@@ -34,6 +65,12 @@ class BuyMenu:
 
 
     def handle_input(self,event):
+        """
+        Handles user input and updates the player's state accordingly.
+
+        Args:
+            event (pygame.event.Event): The event object representing the user input.
+        """
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
                 self.selected_index = (self.selected_index - 1) % len(self.items)
@@ -54,7 +91,24 @@ class BuyMenu:
                 self.is_open = False
 
 class Merchant(pygame.sprite.Sprite):
+    """
+    Represents a merchant in the game's exploration state.
+
+    Attributes:
+        x (int): The x-coordinate of the merchant.
+        y (int): The y-coordinate of the merchant.
+        sprite_sheet (pygame.Surface): The sprite sheet containing the merchant's image.
+        image (pygame.Surface): The image representing the merchant.
+        rect (pygame.Rect): The rectangle representing the merchant's position and size.
+    """
     def __init__(self,x,y):
+        """
+        Initializes a Merchant object.
+
+        Args:
+            x (int): The x-coordinate of the merchant.
+            y (int): The y-coordinate of the merchant.
+        """
         super().__init__()
         self.x = x
         self.y = y
@@ -65,13 +119,27 @@ class Merchant(pygame.sprite.Sprite):
         self.load_img()
 
     def load_sprite_sheet(self):
+        """
+        Loads the sprite sheet for the merchant.
+        """
         self.sprite_sheet = pygame.image.load("../assets/map_entities/NPCS.png").convert_alpha()
 
     def load_img(self):
+        """
+        Loads the image for the merchant.
+        """
         sprite_loader = spritesheet.HandleSpriteSheet(self.sprite_sheet)
         self.image = sprite_loader.get_image(1, 0, 16, 16)
 
     def check_interact(self, player):
+        """
+        Checks player interactions with the merchant based on their position.
+
+        Args:
+            player (Player): The player object interacting with the merchant.
+
+        :returns bool: True if player interacts with the merchant, False otherwise.
+        """
         merchant_x, merchant_y = self.x, self.y
         player_x, player_y = player.x // 16, player.y // 16
         if merchant_x == player_x and merchant_y == player_y - 1:  # Above
@@ -85,6 +153,15 @@ class Merchant(pygame.sprite.Sprite):
         return False
 
     def interact(self,event,player,player_state):
+        """
+        Handles player interactions with the merchant and shop.
+        Updates player's state accordingly.
+
+        Args:
+            event (pygame.event.Event): The event object representing the user input.
+            player (Player): The player object interacting with the merchant.
+            player_state (PlayerState): The player's current state.
+        """
         if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
             if self.check_interact(player):
                 potion = Item(0,0,"Potion")
@@ -100,6 +177,3 @@ class Merchant(pygame.sprite.Sprite):
                         buy_menu.handle_input(event)
                     buy_menu.render()
                     pygame.display.update()
-                return True
-        else:
-            return False
